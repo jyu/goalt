@@ -228,7 +228,7 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
-  models.Users.findOne({name:senderID}, function(err, result) {
+  models.User.findOne({name:senderID}, function(err, result) {
     if (err) {
       console.log("new user");
     }
