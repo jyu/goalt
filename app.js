@@ -299,10 +299,10 @@ function receivedMessage(event) {
     if (messageText.includes("help") ||
         messageText.includes("hi"))
     {
-      sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you!");
-      sendTextMessage(senderID, "Use \"start\" to begin a new goal");
-      sendTextMessage(senderID, "When you perform a task, use \"add\"");
-      sendTextMessage(senderID, "Use \"streaks\" to check your progress");
+      sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you! \n \
+                                Use \"start\" to begin a new goal \n \
+                                When you perform a task, use \"add\" \n \
+                                Use \"streaks\" to check your progress");
 
     } else if (messageText.includes("start")) {
       models.User.update({name:senderID},
