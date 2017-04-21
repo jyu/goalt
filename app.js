@@ -231,6 +231,13 @@ function receivedMessage(event) {
   models.User.findOne({name:senderID}, function(err, result) {
     if (result == null) {
       console.log("new user");
+      var newUser = new models.User({
+        name: senderID,
+        goals: [],
+        streaks: []
+      });
+      newUser.save(function(err, result) {
+      });
     }
   });
 
