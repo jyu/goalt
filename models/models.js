@@ -20,6 +20,6 @@ var checkLength = function(s) {
 
 // Validators for our model. When we save or modify our model, these validators
 // get run. If they return false, an error happens.
-User.schema.path('String').validate(checkLength, "Caption cannot be empty");
+User.schema.path('user').validate(checkLength, "user cannot be empty");
 
 exports.User = User;
