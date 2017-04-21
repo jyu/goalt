@@ -232,7 +232,7 @@ function receivedMessage(event) {
     if (err) {
       console.log("new user");
     }
-  }
+  });
 
   console.log("Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
