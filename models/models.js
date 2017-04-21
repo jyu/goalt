@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 // Define a schema: this gives us a structure for our data
 var userSchema = mongoose.Schema({
-  user: String,
+  name: Number,
   goals: [String],
   streaks: [Number],
 });
@@ -20,6 +20,5 @@ var checkLength = function(s) {
 
 // Validators for our model. When we save or modify our model, these validators
 // get run. If they return false, an error happens.
-User.schema.path('user').validate(checkLength, "user cannot be empty");
 
 exports.User = User;
