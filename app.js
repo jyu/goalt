@@ -25,7 +25,7 @@ app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 
 // Import our models file to the router
-var models = require('../models/models');
+var models = require('models/models');
 
 // Connect to the database over Mongoose
 var mongoose = require('mongoose');
