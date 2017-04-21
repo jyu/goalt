@@ -229,7 +229,7 @@ function receivedMessage(event) {
   var message = event.message;
 
   models.User.findOne({name:senderID}, function(err, result) {
-    if (result == NULL) {
+    if (result == null) {
       console.log("new user");
     }
   });
