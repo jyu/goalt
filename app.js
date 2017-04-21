@@ -277,9 +277,8 @@ function receivedMessage(event) {
     models.User.findOne({
                           name: senderID
                         },
-                        'status',
       function(err, result) {
-        if (result == 'naming_goal') {
+        if (result.status == 'naming_goal') {
           var newGoal = new gmodels.Goal({
           user: senderID,
           name: messageText.charAt(0).toUpperCase() + messageText.slice(1),
