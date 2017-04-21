@@ -275,8 +275,7 @@ function receivedMessage(event) {
   if (messageText) {
 
     models.User.findOne({
-                          name: senderID,
-                          status: {$not:'null'}
+                          name: senderID
                         },
                         'status',
       function(err, result) {
@@ -289,6 +288,12 @@ function receivedMessage(event) {
         });
         newUser.save(function(err, result) {
           console.log("new goal created");
+          models.User.update({name:senderID},
+            {$set:{status:'null'}},
+            function(err) {
+              sendTextMessage(senderID, "What is the name of your goal?");
+          });
+
         });
       }
       }
@@ -299,9 +304,9 @@ function receivedMessage(event) {
     if (messageText.includes("help") ||
         messageText.includes("hi"))
     {
-      sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you! \n \
-                                Use \"start\" to begin a new goal \n \
-                                When you perform a task, use \"add\" \n \
+      sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you!\
+                                Use \"start\" to begin a new goal\
+                                When you perform a task, use \"add\"\
                                 Use \"streaks\" to check your progress");
 
     } else if (messageText.includes("start")) {
