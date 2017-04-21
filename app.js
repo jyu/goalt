@@ -228,6 +228,16 @@ function receivedMessage(event) {
   var timeOfMessage = event.timestamp;
   var message = event.message;
 
+
+  console.log("Received message for user %d and page %d at %d with message:",
+    senderID, recipientID, timeOfMessage);
+  console.log(JSON.stringify(message));
+
+  var isEcho = message.is_echo;
+  var messageId = message.mid;
+  var appId = message.app_id;
+  var metadata = message.metadata;
+
   models.User.findOne({name:senderID}, function(err, result) {
     if (result == null) {
       console.log("new user");
@@ -244,16 +254,6 @@ function receivedMessage(event) {
       });
     }
   });
-
-  console.log("Received message for user %d and page %d at %d with message:",
-    senderID, recipientID, timeOfMessage);
-  console.log(JSON.stringify(message));
-
-  var isEcho = message.is_echo;
-  var messageId = message.mid;
-  var appId = message.app_id;
-  var metadata = message.metadata;
-
   // You may get a text or attachment but not both
   var messageText = (message.text).toLowerCase();
   var messageAttachments = message.attachments;
