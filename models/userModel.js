@@ -3,8 +3,7 @@ var mongoose = require('mongoose');
 // Define a schema: this gives us a structure for our data
 var userSchema = mongoose.Schema({
   name: Number,
-  goals: [String],
-  streaks: [Number],
+  status: String
 });
 
 // For more complex logic, methods go here

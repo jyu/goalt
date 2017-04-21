@@ -8,8 +8,7 @@
  */
 
 /* jshint node: true, devel: true */
-'use strict';
-
+'use strict'
 const
   bodyParser = require('body-parser'),
   config = require('config'),
@@ -25,7 +24,8 @@ app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 
 // Import our models file to the router
-var models = require('./models/models');
+var models = require('./models/userModel');
+var gmodels = require('./models/goalModel');
 
 // Connect to the database over Mongoose
 var mongoose = require('mongoose');
@@ -233,10 +233,14 @@ function receivedMessage(event) {
       console.log("new user");
       var newUser = new models.User({
         name: senderID,
-        goals: [],
-        streaks: []
+        status: "null"
       });
       newUser.save(function(err, result) {
+        console.log("new user created");
+        sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you!");
+        sendTextMessage(senderID, "Use \"start\" to begin a new goal");
+        sendTextMessage(senderID, "When you perform a task, use \"add\"");
+        sendTextMessage(senderID, "Use \"streaks\" to check your progress");
       });
     }
   });
@@ -251,7 +255,7 @@ function receivedMessage(event) {
   var metadata = message.metadata;
 
   // You may get a text or attachment but not both
-  var messageText = message.text;
+  var messageText = (message.text).toLowerCase();
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
@@ -268,14 +272,44 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Quick reply tapped");
     return;
   }
-
   if (messageText) {
 
+    models.User.findOne({
+                          name: senderID,
+                          status: {$not:'null'}
+                        },
+                        'status',
+      function(err, result) {
+        if (result == 'naming_goal') {
+          var newGoal = new gmodels.Goal({
+          user: senderID,
+          name: messageText.charAt(0).toUpperCase() + messageText.slice(1),
+          streak: 0,
+          log: []
+        });
+        newUser.save(function(err, result) {
+          console.log("new goal created");
+        });
+      }
+      }
+    );
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
-    if (messageText.includes("start") || messageText.includes("Start")) {
-      // start
+    if (messageText.includes("help") ||
+        messageText.includes("hi"))
+    {
+      sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you!");
+      sendTextMessage(senderID, "Use \"start\" to begin a new goal");
+      sendTextMessage(senderID, "When you perform a task, use \"add\"");
+      sendTextMessage(senderID, "Use \"streaks\" to check your progress");
+
+    } else if (messageText.includes("start")) {
+      models.User.update({name:senderID},
+        {$set:{status:'naming_goal'}},
+        function(err) {
+          sendTextMessage(senderID, "What is the name of your goal?");
+        });
     }
     switch (messageText) {
       case 'image':
