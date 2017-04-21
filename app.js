@@ -278,14 +278,14 @@ function receivedMessage(event) {
                           name: senderID
                         },
       function(err, result) {
-        if (result.status == 'naming_goal') {
+        if (result != null && result.status == 'naming_goal') {
           var newGoal = new gmodels.Goal({
           user: senderID,
           name: messageText.charAt(0).toUpperCase() + messageText.slice(1),
           streak: 0,
           log: []
         });
-        newUser.save(function(err, result) {
+        newGoal.save(function(err, result) {
           console.log("new goal created");
           models.User.update({name:senderID},
             {$set:{status:'null'}},
