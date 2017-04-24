@@ -273,29 +273,27 @@ function receivedMessage(event) {
     return;
   }
   if (messageText) {
-
-    models.User.findOne({
-                          name: senderID
-                        },
-      function(err, result) {
-        if (result != null && result.status == 'naming_goal') {
-          var newGoal = new gmodels.Goal({
-          user: senderID,
-          name: messageText.charAt(0).toUpperCase() + messageText.slice(1),
-          streak: 0,
-          log: []
-        });
-        newGoal.save(function(err, result) {
-          console.log("new goal created");
-          models.User.update({name:senderID},
-            {$set:{status:'null'}},
-            function(err) {
-              sendTextMessage(senderID, "What is the name of your goal?");
-          });
-
-        });
-      }
-      }
+      models.User.findOne({name: senderID},
+        function(err, result) {
+          if (result != null) {
+            if (result.status == 'naming_goal') {
+              var newGoal = new gmodels.Goal({
+              user: senderID,
+              name: messageText.charAt(0).toUpperCase() + messageText.slice(1),
+              streak: 0,
+              log: []
+            });
+            newGoal.save(function() {
+              console.log("new goal created");
+              models.User.update({name:senderID},
+                {$set:{status:'null'}},
+                function(err) {
+                  sendTextMessage(senderID, "Goal %s Added!", messageText);
+              });
+            });
+            }
+          }
+        }
     );
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
@@ -305,14 +303,22 @@ function receivedMessage(event) {
     {
       sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you!\
                                 Use \"start\" to begin a new goal\
-                                When you perform a task, use \"add\"\
-                                Use \"streaks\" to check your progress");
+                                When you perform a task, use \"add\" \"goal name\" \"log message\"\
+                                Use \"streaks\" to check your progress \
+                                Use \"log\" \"goal name\" to check your progress \
+                                Use \"help\" if you need any help!]");
 
     } else if (messageText.includes("start")) {
       models.User.update({name:senderID},
         {$set:{status:'naming_goal'}},
         function(err) {
           sendTextMessage(senderID, "What is the name of your goal?");
+        });
+    } else if (messageText.includes("start")) {
+      models.User.update({name:senderID},
+        {$set:{status:'logging_goal'}},
+        function(err) {
+          sendTextMessage(senderID, "Add a log message for your goal!");
         });
     }
     switch (messageText) {
@@ -323,8 +329,6 @@ function receivedMessage(event) {
       default:
         sendTextMessage(senderID, messageText);
     }
-  } else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
   }
 }
 
