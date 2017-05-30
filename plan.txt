@@ -1,0 +1,35 @@
+Plans:
+MVP *
+
+sign up new users
+
+*user account / mongodb database
+*start new goal - text
+quick reply buttons for different days
+
+*add update - text
+*see streaks - text (emojis)
+help
+
+heroku scheduler
+*reminder - text 
+*daily motivation pics from reddit
+delete goals
+
+make page tokens SECRET
+clear account/ restart
+view status for goals
+  start date
+  longest streak
+  image
+motivating song/audio
+vanilla pics for different preset tasks
+browse all goals - structured message
+
+send calendar
+
+schema:
+User:
+numgoals
+goals list
+streak list
