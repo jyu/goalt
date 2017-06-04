@@ -255,7 +255,7 @@ function receivedMessage(event) {
   });
 
   // You may get a text or attachment but not both
-  var messageText = (message.text).toLowerCase();
+  var messageText = message.text
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
@@ -274,6 +274,7 @@ function receivedMessage(event) {
   }
   // Message Texts
   if (messageText) {
+      messageText = messageText.toLowerCase();
       // Get user from database
       models.User.findOne({name: senderID},
         function(err, result) {
@@ -310,11 +311,7 @@ function receivedMessage(event) {
         sendTextMessage(senderID, "Use \"streaks\" to check your progress");
 
     } else if (messageText.includes("start")) {
-      models.User.update({name:senderID},
-        {$set:{status:'naming_goal'}},
-        function(err) {
-          sendTextMessage(senderID, "What is the name of your goal?");
-        });
+      newGoal(senderID);
     } else if (messageText.includes("add")) {
       models.User.update({name:senderID},
         {$set:{status:'logging_goal'}},
@@ -334,6 +331,16 @@ function receivedMessage(event) {
         sendTextMessage(senderID, messageText);
     }
   }
+}
+
+// Bot Logic Functions
+
+function newGoal(senderID) {
+  models.User.update({name:senderID},
+  {$set:{status:'logging_goal'}},
+  function(err) {
+    sendTextMessage(senderID, "Add a log message for your goal!");
+  });
 }
 
 
@@ -382,9 +389,10 @@ function receivedPostback(event) {
   console.log("Received postback for user %d and page %d with payload '%s' " +
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
-  // When a postback is called, we'll send a message back to the sender to
-  // let them know it was successful
-  sendTextMessage(senderID, "Postback called");
+  if (payload == "Payload new goal") {
+    newGoal(senderID)
+  }
+
 }
 
 /*
@@ -441,7 +449,7 @@ function sendHome(recipientId) {
             {
               title: "GoalT: A Goal Tracker For You",
               subtitle: "Swipe for goals",
-              image_url: SERVER_URL + "/assets/home.jpeg",
+              image_url: SERVER_URL + "/assets/home.png",
               buttons: [
                 {
                   type: "postback",
@@ -449,22 +457,12 @@ function sendHome(recipientId) {
                   payload: "Payload new goal",
                 }, {
                   type: "postback",
-                  title: "Streaks",
+                  title: "View Goals",
                   payload: "Payload streaks",
-                }
-              ]
-            },
-            {
-              title: "No goals yet!",
-              buttons: [
-                {
-                  type: "postback",
-                  title: "New Goal",
-                  payload: "Payload new goal",
                 }, {
                   type: "postback",
-                  title: "Home",
-                  payload: "Payload home",
+                  title: "Add Progress",
+                  payload: "Payload progress",
                 }
               ]
             }

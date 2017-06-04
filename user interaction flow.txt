@@ -31,3 +31,15 @@ structured messages w/ generic template
     - view goals/streaks
     - add goal/streaks
     - view logs
+
+
+view goals ->
+list of goals with streak number (emoji)
+->click on one->
+view logs
+add progress
+add image
+favorite
+
+
+add perma menu for going to home
