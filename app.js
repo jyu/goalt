@@ -239,7 +239,7 @@ function receivedMessage(event) {
   var metadata = message.metadata;
 
   // Create new user or identify user
-  models.User.find({name:senderID}, function(err, result) {
+  models.User.findOne({name:senderID}, function(err, result) {
     if (result == null) {
       console.log("new user");
       var newUser = new models.User({
@@ -358,7 +358,7 @@ function nameGoal(senderID, messageText) {
 // View Goal Functions:
 function goalList(senderID) {
   // Create new user or identify user
-  gmodels.Goal.findOne({user:senderID}, function(err, result) {
+  gmodels.Goal.find({name:{$in:[senderID]}}, function(err, result) {
     if (result == null) {
       console.log("empty");
     } else {

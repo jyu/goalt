@@ -4,7 +4,8 @@ var goalSchema = mongoose.Schema({
   user: Number,
   name: String,
   streak: Number,
-  log: [String]
+  log: [String],
+  lastUpdate: Number
 });
 
 var Goal = mongoose.model('Goal', goalSchema);
