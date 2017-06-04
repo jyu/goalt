@@ -465,6 +465,8 @@ function sendHome(recipientId) {
       }
     }
   };
+  callSendAPI(messageData);
+}
 
 function sendGenericMessage(recipientId) {
   var messageData = {
