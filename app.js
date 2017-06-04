@@ -358,7 +358,7 @@ function nameGoal(senderID, messageText) {
 // View Goal Functions:
 function goalList(senderID) {
   // Create new user or identify user
-  gmodels.Goal.find({name:{$in:[senderID]}}, function(err, result) {
+  gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
     if (result == null) {
       console.log("empty");
     } else {
