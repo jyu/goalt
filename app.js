@@ -253,7 +253,7 @@ function receivedMessage(event) {
       });
       return;
     } else {
-      currentUser = results;
+      currentUser = result;
     }
   });
 
