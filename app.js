@@ -256,6 +256,8 @@ function receivedMessage(event) {
     } else {
       currentUser = result;
       console.log('first time')
+      console.log(result.status)
+      console.log('second time')
       console.log(currentUser.status)
       testA = 1;
     }
