@@ -237,7 +237,6 @@ function receivedMessage(event) {
   var messageId = message.mid;
   var appId = message.app_id;
   var metadata = message.metadata;
-  var exit = false;
 
   // Create new user or identify user
   models.User.findOne({name:senderID}, function(err, result) {
@@ -286,36 +285,33 @@ function receivedMessage(event) {
             if (result.status == 'naming_goal') {
               nameGoal(senderID, messageText)
             }
-            exit = true;
+          }
+          else {
+            // Other cases
+            switch (messageText) {
+              case 'image':
+                sendImageMessage(senderID);
+                break;
+              case 'generic':
+                sendGenericMessage(senderID);
+              default:
+                sendHome(senderID);
+            }
           }
         });
 
     // Check commands
-    if (messageText.includes("start")) {
-      makeGoal(senderID);
-      return;
-    } else if (messageText.includes("add")) {
-      models.User.update({name:senderID},
-        {$set:{status:'logging_goal'}},
-        function(err) {
-          sendTextMessage(senderID, "Add a log message for your goal!");
-        });
-      return;
-    }
-
-    if (exit) {
-      return;
-    }
-    // Other cases
-    switch (messageText) {
-      case 'image':
-        sendImageMessage(senderID);
-        break;
-      case 'generic':
-        sendGenericMessage(senderID);
-      default:
-        sendHome(senderID);
-    }
+    // if (messageText.includes("start")) {
+    //   makeGoal(senderID);
+    //   return;
+    // } else if (messageText.includes("add")) {
+    //   models.User.update({name:senderID},
+    //     {$set:{status:'logging_goal'}},
+    //     function(err) {
+    //       sendTextMessage(senderID, "Add a log message for your goal!");
+    //     });
+    //   return;
+    // }
   }
 }
 
@@ -334,7 +330,7 @@ function nameGoal(senderID, messageText) {
   messageText = messageText.charAt(0).toUpperCase() + messageText.slice(1);
 
   gmodels.Goal.findOne({user:senderID, name:messageText}, function(err, result) {
-    // Find if there already exits a goal
+    // Find if there already exists a goal
     if (result != null) {
       sendTextMessage(senderID, "Goal with that name has already been created. Try another name.")
       return;
@@ -360,7 +356,15 @@ function nameGoal(senderID, messageText) {
 
 // View Goal Functions:
 function goalList(senderID) {
-
+  // Create new user or identify user
+  gmodels.Goal.findOne({user:senderID}, function(err, result) {
+    if (result == null) {
+      console.log("empty");
+    } else {
+      console.log('results');
+      console.log(result);
+    }
+  });
 
 
 }
@@ -411,7 +415,9 @@ function receivedPostback(event) {
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
   if (payload == "Payload new goal") {
-    makeGoal(senderID)
+    makeGoal(senderID);
+  } else if (payload == "Payload view") {
+    goalList(senderID);
   }
 
 }
@@ -479,7 +485,7 @@ function sendHome(recipientId) {
                 }, {
                   type: "postback",
                   title: "View Goals",
-                  payload: "Payload streaks",
+                  payload: "Payload view",
                 }, {
                   type: "postback",
                   title: "Add Progress",
