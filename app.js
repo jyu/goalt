@@ -285,17 +285,17 @@ function receivedMessage(event) {
             if (result.status == 'naming_goal') {
               nameGoal(senderID, messageText)
             }
-          }
-          else {
-            // Other cases
-            switch (messageText) {
-              case 'image':
-                sendImageMessage(senderID);
-                break;
-              case 'generic':
-                sendGenericMessage(senderID);
-              default:
-                sendHome(senderID);
+            if (result.status == 'null') {
+              // Standard cases
+              switch (messageText) {
+                case 'image':
+                  sendImageMessage(senderID);
+                  break;
+                case 'generic':
+                  sendGenericMessage(senderID);
+                default:
+                  sendHome(senderID);
+              }
             }
           }
         });
@@ -347,7 +347,8 @@ function nameGoal(senderID, messageText) {
         models.User.update({name:senderID},
           {$set:{status:'null'}},
           function(err) {
-            sendTextMessage(senderID, "Goal " + messageText + " Added!");
+            sendTextMessage(senderID, "Goal " + messageText + " Added! Going to home");
+            sendHome(senderID);
         });
       });
     }
@@ -365,8 +366,6 @@ function goalList(senderID) {
       console.log(result);
     }
   });
-
-
 }
 
 /*
