@@ -237,8 +237,9 @@ function receivedMessage(event) {
   var messageId = message.mid;
   var appId = message.app_id;
   var metadata = message.metadata;
+  var currentUser;
 
-  // Create new user / identify user
+  // Create new user or identify user
   models.User.findOne({name:senderID}, function(err, result) {
     if (result == null) {
       console.log("new user");
@@ -251,6 +252,8 @@ function receivedMessage(event) {
 
       });
       return;
+    } else {
+      currentUser = results;
     }
   });
 
@@ -272,53 +275,31 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Quick reply tapped");
     return;
   }
+
   // Message Texts
   if (messageText) {
       messageText = messageText.toLowerCase();
-      // Get user from database
-      models.User.findOne({name: senderID},
-        function(err, result) {
-          if (result != null) {
-            // Statuses
-            if (result.status == 'naming_goal') {
-              var newGoal = new gmodels.Goal({
-                user: senderID,
-                name: messageText.charAt(0).toUpperCase() + messageText.slice(1),
-                streak: 0,
-                log: []
-              });
-              newGoal.save(function() {
-                console.log("new goal created");
-                models.User.update({name:senderID},
-                  {$set:{status:'null'}},
-                  function(err) {
-                    sendTextMessage(senderID, "Goal %s Added!", messageText);
-                });
-              });
-            }
-          }
-        }
-    );
-    // If we receive a text message, check to see if it matches any special
-    // keywords and send back the corresponding example. Otherwise, just echo
-    // the text we received.
-    if (messageText.includes("help") ||
-        messageText.includes("hi"))
-    {
-        sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you!");
-        sendTextMessage(senderID, "Use \"start\" to begin a new goal");
-        sendTextMessage(senderID, "When you perform a task, use \"add\"");
-        sendTextMessage(senderID, "Use \"streaks\" to check your progress");
 
-    } else if (messageText.includes("start")) {
-      newGoal(senderID);
+      // Check status
+      if (currentUser.status == 'naming_goal') {
+        nameGoal(senderID, messageText)
+        return;
+      }
+
+    // Check commands
+    if (messageText.includes("start")) {
+      makeGoal(senderID);
+      return;
     } else if (messageText.includes("add")) {
       models.User.update({name:senderID},
         {$set:{status:'logging_goal'}},
         function(err) {
           sendTextMessage(senderID, "Add a log message for your goal!");
         });
+      return;
     }
+
+    // Other cases
     switch (messageText) {
       case 'image':
         sendImageMessage(senderID);
@@ -328,21 +309,44 @@ function receivedMessage(event) {
       case 'home':
         sendHome(senderID);
       default:
-        sendTextMessage(senderID, messageText);
+        sendHome(senderID);
     }
   }
 }
 
 // Bot Logic Functions
 
-function newGoal(senderID) {
+// New Goal Functions:
+function makeGoal(senderID) {
   models.User.update({name:senderID},
-  {$set:{status:'logging_goal'}},
+  {$set:{status:'naming_goal'}},
   function(err) {
-    sendTextMessage(senderID, "Add a log message for your goal!");
+    sendTextMessage(senderID, "What is the name of your goal?");
   });
 }
 
+function nameGoal(senderID, messageText) {
+  messageText = messageText.charAt(0).toUpperCase() + messageText.slice(1);
+  var newGoal = new gmodels.Goal({
+    user: senderID,
+    name: messageText,
+    streak: 0,
+    log: []
+  });
+  newGoal.save(function() {
+    console.log("new goal created");
+    models.User.update({name:senderID},
+      {$set:{status:'null'}},
+      function(err) {
+        sendTextMessage(senderID, "Goal " + messageText + " Added!");
+    });
+  });
+}
+
+// View Goal Functions:
+function sendGoalList() {
+
+}
 
 /*
  * Delivery Confirmation Event
@@ -390,7 +394,7 @@ function receivedPostback(event) {
     "at %d", senderID, recipientID, payload, timeOfPostback);
 
   if (payload == "Payload new goal") {
-    newGoal(senderID)
+    makeGoal(senderID)
   }
 
 }
