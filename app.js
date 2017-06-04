@@ -239,7 +239,7 @@ function receivedMessage(event) {
   var metadata = message.metadata;
 
   // Create new user or identify user
-  models.User.findOne({name:senderID}, function(err, result) {
+  models.User.find({name:senderID}, function(err, result) {
     if (result == null) {
       console.log("new user");
       var newUser = new models.User({
