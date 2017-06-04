@@ -1,0 +1,32 @@
+User Interaction
+-> is flow of interaction
+* means end, no more user input
+
+Welcome:
+    image
+    greeting
+        quick explanation
+
+Start Goal:
+    start -> ask for name
+
+Add event:
+    add -> which goal -> add log
+
+View goals:
+    show streaks
+
+View logs for a goal
+    view logs -> which goal
+
+
+
+Structured messages for all goals (carousel)
+    - pic
+    - streak
+    - button: view logs, add, delete
+
+structured messages w/ generic template
+    - view goals/streaks
+    - add goal/streaks
+    - view logs

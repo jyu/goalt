@@ -12,7 +12,7 @@ quick reply buttons for different days
 help
 
 heroku scheduler
-*reminder - text 
+*reminder - text
 *daily motivation pics from reddit
 delete goals
 
@@ -33,3 +33,6 @@ User:
 numgoals
 goals list
 streak list
+
+social media links/ share
+NLP to get profile picture
