@@ -437,30 +437,37 @@ function sendHome(recipientId) {
         type: "template",
         payload: {
           template_type: "generic",
-          elements: [{
-            title: "GoalT: A Goal Tracker For You",
-            subtitle: "Swipe for goals",
-            buttons: [{
-              type: "postback",
-              title: "New Goal",
-              payload: "Payload new goal",
-            }, {
-              type: "postback",
-              title: "Streaks",
-              payload: "Payload streaks",
-            }, {
-            title: "No goals yet!",
-            buttons: [{
-              type: "postback",
-              title: "New Goal",
-              payload: "Payload new goal",
-            }, {
-              type: "postback",
-              title: "Home",
-              payload: "Payload home",
+          elements: [
+            {
+              title: "GoalT: A Goal Tracker For You",
+              subtitle: "Swipe for goals",
+              buttons: [
+                {
+                  type: "postback",
+                  title: "New Goal",
+                  payload: "Payload new goal",
+                }, {
+                  type: "postback",
+                  title: "Streaks",
+                  payload: "Payload streaks",
+                }
+              ]
+            },
+            {
+              title: "No goals yet!",
+              buttons: [
+                {
+                  type: "postback",
+                  title: "New Goal",
+                  payload: "Payload new goal",
+                }, {
+                  type: "postback",
+                  title: "Home",
+                  payload: "Payload home",
+                }
+              ]
             }
-            ],
-          }]
+          ]
         }
       }
     }
