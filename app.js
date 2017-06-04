@@ -238,6 +238,7 @@ function receivedMessage(event) {
   var appId = message.app_id;
   var metadata = message.metadata;
   var currentUser;
+  var testA;
 
   // Create new user or identify user
   models.User.findOne({name:senderID}, function(err, result) {
@@ -254,8 +255,14 @@ function receivedMessage(event) {
       return;
     } else {
       currentUser = result;
+      console.log('first time')
+      console.log(currentUser.status)
+      testA = 1;
     }
   });
+  console.log('outside')
+  console.log(testA)
+  console.log(currentUser.status)
 
   // You may get a text or attachment but not both
   var messageText = message.text
