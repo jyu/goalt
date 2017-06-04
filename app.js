@@ -441,6 +441,7 @@ function sendHome(recipientId) {
             {
               title: "GoalT: A Goal Tracker For You",
               subtitle: "Swipe for goals",
+              image_url: SERVER_URL + "/assets/home.jpeg",
               buttons: [
                 {
                   type: "postback",

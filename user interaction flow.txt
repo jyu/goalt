@@ -8,10 +8,10 @@ Welcome:
         quick explanation
 
 Start Goal:
-    start -> ask for name
+    start -> ask for name ->motivation
 
 Add event:
-    add -> which goal -> add log
+    add -> which goal -> add log-> motivation
 
 View goals:
     show streaks
