@@ -237,8 +237,6 @@ function receivedMessage(event) {
   var messageId = message.mid;
   var appId = message.app_id;
   var metadata = message.metadata;
-  var currentUser;
-  var testA;
 
   // Create new user or identify user
   models.User.findOne({name:senderID}, function(err, result) {
@@ -253,18 +251,8 @@ function receivedMessage(event) {
 
       });
       return;
-    } else {
-      currentUser = result;
-      console.log('first time')
-      console.log(result.status)
-      console.log('second time')
-      console.log(currentUser.status)
-      testA = 1;
     }
   });
-  console.log('outside')
-  console.log(testA)
-  console.log(currentUser.status)
 
   // You may get a text or attachment but not both
   var messageText = message.text
@@ -290,10 +278,15 @@ function receivedMessage(event) {
       messageText = messageText.toLowerCase();
 
       // Check status
-      if (currentUser.status == 'naming_goal') {
-        nameGoal(senderID, messageText)
-        return;
-      }
+      models.User.findOne({name: senderID},
+        function(err, result) {
+          if (result != null) {
+            // Statuses
+            if (result.status == 'naming_goal') {
+              nameGoal(senderID, messageText)
+            }
+          }
+        });
 
     // Check commands
     if (messageText.includes("start")) {
