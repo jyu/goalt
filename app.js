@@ -237,6 +237,7 @@ function receivedMessage(event) {
   var messageId = message.mid;
   var appId = message.app_id;
   var metadata = message.metadata;
+  var exit = false;
 
   // Create new user or identify user
   models.User.findOne({name:senderID}, function(err, result) {
@@ -248,7 +249,7 @@ function receivedMessage(event) {
       });
       newUser.save(function(err, result) {
         console.log("New user created");
-
+        sendTextMessage(senderID, "Welcome, here is the home screen:")
       });
       return;
     }
@@ -285,6 +286,7 @@ function receivedMessage(event) {
             if (result.status == 'naming_goal') {
               nameGoal(senderID, messageText)
             }
+            exit = true;
           }
         });
 
@@ -301,6 +303,9 @@ function receivedMessage(event) {
       return;
     }
 
+    if (exit) {
+      return;
+    }
     // Other cases
     switch (messageText) {
       case 'image':
@@ -308,8 +313,6 @@ function receivedMessage(event) {
         break;
       case 'generic':
         sendGenericMessage(senderID);
-      case 'home':
-        sendHome(senderID);
       default:
         sendHome(senderID);
     }
@@ -329,24 +332,36 @@ function makeGoal(senderID) {
 
 function nameGoal(senderID, messageText) {
   messageText = messageText.charAt(0).toUpperCase() + messageText.slice(1);
-  var newGoal = new gmodels.Goal({
-    user: senderID,
-    name: messageText,
-    streak: 0,
-    log: []
-  });
-  newGoal.save(function() {
-    console.log("new goal created");
-    models.User.update({name:senderID},
-      {$set:{status:'null'}},
-      function(err) {
-        sendTextMessage(senderID, "Goal " + messageText + " Added!");
-    });
+
+  gmodels.Goal.findOne({user:senderID, name:messageText}, function(err, result) {
+    // Find if there already exits a goal
+    if (result != null) {
+      sendTextMessage(senderID, "Goal with that name has already been created. Try another name.")
+      return;
+    } else {
+      // Create Goal
+      var newGoal = new gmodels.Goal({
+        user: senderID,
+        name: messageText,
+        streak: 0,
+        log: []
+      });
+      newGoal.save(function() {
+        console.log("new goal created");
+        models.User.update({name:senderID},
+          {$set:{status:'null'}},
+          function(err) {
+            sendTextMessage(senderID, "Goal " + messageText + " Added!");
+        });
+      });
+    }
   });
 }
 
 // View Goal Functions:
-function sendGoalList() {
+function goalList(senderID) {
+
+
 
 }
 
@@ -439,7 +454,7 @@ function receivedAccountLink(event) {
     "and auth code %s ", senderID, status, authCode);
 }
 
-// Send Home Carousel
+// Send Home
 
 function sendHome(recipientId) {
   var messageData = {
@@ -454,7 +469,7 @@ function sendHome(recipientId) {
           elements: [
             {
               title: "GoalT: A Goal Tracker For You",
-              subtitle: "Swipe for goals",
+              subtitle: "Type anything to return Home",
               image_url: SERVER_URL + "/assets/home.png",
               buttons: [
                 {
