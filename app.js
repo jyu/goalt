@@ -265,32 +265,35 @@ function receivedMessage(event) {
       messageId, appId, metadata);
     return;
   } else if (quickReply) {
+    // Quick Replies
     var quickReplyPayload = quickReply.payload;
     console.log("Quick reply for message %s with payload %s",
       messageId, quickReplyPayload);
-
     sendTextMessage(senderID, "Quick reply tapped");
     return;
   }
+  // Message Texts
   if (messageText) {
+      // Get user from database
       models.User.findOne({name: senderID},
         function(err, result) {
           if (result != null) {
+            // Statuses
             if (result.status == 'naming_goal') {
               var newGoal = new gmodels.Goal({
-              user: senderID,
-              name: messageText.charAt(0).toUpperCase() + messageText.slice(1),
-              streak: 0,
-              log: []
-            });
-            newGoal.save(function() {
-              console.log("new goal created");
-              models.User.update({name:senderID},
-                {$set:{status:'null'}},
-                function(err) {
-                  sendTextMessage(senderID, "Goal %s Added!", messageText);
+                user: senderID,
+                name: messageText.charAt(0).toUpperCase() + messageText.slice(1),
+                streak: 0,
+                log: []
               });
-            });
+              newGoal.save(function() {
+                console.log("new goal created");
+                models.User.update({name:senderID},
+                  {$set:{status:'null'}},
+                  function(err) {
+                    sendTextMessage(senderID, "Goal %s Added!", messageText);
+                });
+              });
             }
           }
         }
@@ -301,12 +304,10 @@ function receivedMessage(event) {
     if (messageText.includes("help") ||
         messageText.includes("hi"))
     {
-      sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you!\
-                                Use \"start\" to begin a new goal\
-                                When you perform a task, use \"add\" \"goal name\" \"log message\"\
-                                Use \"streaks\" to check your progress \
-                                Use \"log\" \"goal name\" to check your progress \
-                                Use \"help\" if you need any help!]");
+        sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you!");
+        sendTextMessage(senderID, "Use \"start\" to begin a new goal");
+        sendTextMessage(senderID, "When you perform a task, use \"add\"");
+        sendTextMessage(senderID, "Use \"streaks\" to check your progress");
 
     } else if (messageText.includes("start")) {
       models.User.update({name:senderID},
@@ -314,7 +315,7 @@ function receivedMessage(event) {
         function(err) {
           sendTextMessage(senderID, "What is the name of your goal?");
         });
-    } else if (messageText.includes("start")) {
+    } else if (messageText.includes("add")) {
       models.User.update({name:senderID},
         {$set:{status:'logging_goal'}},
         function(err) {
@@ -325,7 +326,8 @@ function receivedMessage(event) {
       case 'image':
         sendImageMessage(senderID);
         break;
-
+      case 'generic':
+        sendGenericMessage(senderID);
       default:
         sendTextMessage(senderID, messageText);
     }
@@ -421,6 +423,54 @@ function receivedAccountLink(event) {
     "and auth code %s ", senderID, status, authCode);
 }
 
+// Send Home Carousel
+
+function sendGenericMessage(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: "rift",
+            subtitle: "Next-generation virtual reality",
+            item_url: "https://www.oculus.com/en-us/rift/",
+            image_url: SERVER_URL + "/assets/rift.png",
+            buttons: [{
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/rift/",
+              title: "Open Web URL"
+            }, {
+              type: "postback",
+              title: "Call Postback",
+              payload: "Payload for first bubble",
+            }],
+          }, {
+            title: "touch",
+            subtitle: "Your Hands, Now in VR",
+            item_url: "https://www.oculus.com/en-us/touch/",
+            image_url: SERVER_URL + "/assets/touch.png",
+            buttons: [{
+              type: "web_url",
+              url: "https://www.oculus.com/en-us/touch/",
+              title: "Open Web URL"
+            }, {
+              type: "postback",
+              title: "Call Postback",
+              payload: "Payload for second bubble",
+            }]
+          }]
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
 /*
  * Send a text message using the Send API.
  *
