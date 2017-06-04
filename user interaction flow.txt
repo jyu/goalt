@@ -19,6 +19,7 @@ View goals:
 View logs for a goal
     view logs -> which goal
 
+Streaks
 
 
 Structured messages for all goals (carousel)

@@ -238,6 +238,7 @@ function receivedMessage(event) {
   var appId = message.app_id;
   var metadata = message.metadata;
 
+  // Create new user / identify user
   models.User.findOne({name:senderID}, function(err, result) {
     if (result == null) {
       console.log("new user");
@@ -246,14 +247,13 @@ function receivedMessage(event) {
         status: "null"
       });
       newUser.save(function(err, result) {
-        console.log("new user created");
-        sendTextMessage(senderID, "Hi! Welcome to Goalt, a goal tracker for you!");
-        sendTextMessage(senderID, "Use \"start\" to begin a new goal");
-        sendTextMessage(senderID, "When you perform a task, use \"add\"");
-        sendTextMessage(senderID, "Use \"streaks\" to check your progress");
+        console.log("New user created");
+
       });
+      return;
     }
   });
+
   // You may get a text or attachment but not both
   var messageText = (message.text).toLowerCase();
   var messageAttachments = message.attachments;
@@ -328,6 +328,8 @@ function receivedMessage(event) {
         break;
       case 'generic':
         sendGenericMessage(senderID);
+      case 'home':
+        sendHome(senderID);
       default:
         sendTextMessage(senderID, messageText);
     }
@@ -424,6 +426,45 @@ function receivedAccountLink(event) {
 }
 
 // Send Home Carousel
+
+function sendHome(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: "GoalT: A Goal Tracker For You",
+            subtitle: "Swipe for goals",
+            buttons: [{
+              type: "postback",
+              title: "New Goal",
+              payload: "Payload new goal",
+            }, {
+              type: "postback",
+              title: "Streaks",
+              payload: "Payload streaks",
+            }, {
+            title: "No goals yet!",
+            buttons: [{
+              type: "postback",
+              title: "New Goal",
+              payload: "Payload new goal",
+            }, {
+              type: "postback",
+              title: "Home",
+              payload: "Payload home",
+            }
+            ],
+          }]
+        }
+      }
+    }
+  };
 
 function sendGenericMessage(recipientId) {
   var messageData = {
