@@ -335,13 +335,14 @@ function nameGoal(senderID, messageText) {
       sendTextMessage(senderID, "Goal with that name has already been created. Try another name.")
       return;
     } else {
+      var d = new Date();
       // Create Goal
       var newGoal = new gmodels.Goal({
         user: senderID,
         name: messageText,
         streak: 0,
         log: [],
-        lastUpdate: getTime() / 1000
+        lastUpdate: d.getTime() / 1000
       });
       newGoal.save(function() {
         console.log("new goal created");
