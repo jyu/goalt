@@ -374,7 +374,7 @@ function viewList(senderID) {
 function sendList(senderID, result) {
   var messageData = {
     recipient: {
-      id: recipientId
+      id: senderID
     },
     message: {
       attachment: {
