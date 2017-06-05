@@ -408,7 +408,8 @@ function sendList(senderID, result) {
     }
     messageData.message.attachment.payload.elements.push(goal)
   }
-  print(messagedata);
+  console.log("list i am sending")
+  console.log(messagedata);
   callSendAPI(messageData);
 }
 
