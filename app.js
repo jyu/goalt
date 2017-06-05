@@ -384,8 +384,6 @@ function sendList(senderID, result) {
           template_type: "list",
           top_element_style: "compact",
           elements: [
-            {
-            }
           ]
         }
       }
@@ -407,9 +405,12 @@ function sendList(senderID, result) {
       // }
     }
     messageData.message.attachment.payload.elements.push(goal)
+    console.log(messageData.message.attachment.payload.elements)
+    console.log('added')
   }
   console.log("list i am sending")
   console.log(messageData);
+  console.log(messageData.message.attachment.payload.elements)
   callSendAPI(messageData);
 }
 
