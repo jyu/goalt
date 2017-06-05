@@ -361,7 +361,7 @@ function nameGoal(senderID, messageText) {
 function viewList(senderID) {
   // Create new user or identify user
   gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
-    if (result == null) {
+    if (result == null || result.length == 0) {
       sendTextMessage(senderID, "No goals yet, start one from home!");
       console.log("empty");
     } else {
@@ -393,7 +393,14 @@ function sendList(senderID, result) {
   };
   for (var i = 0; i < result.length; i++) {
     var goal = {
-      title: result[i].name
+      title: result[i].name,
+      buttons: [
+                {
+                  type: "postback",
+                  title: "View",
+                  payload: result[i].name + " view",
+                }
+               ]
       // default_action: {
       //   type: postback
       //   payload: result[i].name + " view"
@@ -401,6 +408,7 @@ function sendList(senderID, result) {
     }
     messageData.message.attachment.payload.elements.push(goal)
   }
+  print(messagedata);
   callSendAPI(messageData);
 }
 
