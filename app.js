@@ -340,7 +340,8 @@ function nameGoal(senderID, messageText) {
         user: senderID,
         name: messageText,
         streak: 0,
-        log: []
+        log: [],
+        lastUpdate: getTime() / 1000
       });
       newGoal.save(function() {
         console.log("new goal created");
@@ -356,16 +357,50 @@ function nameGoal(senderID, messageText) {
 }
 
 // View Goal Functions:
-function goalList(senderID) {
+function viewList(senderID) {
   // Create new user or identify user
   gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
     if (result == null) {
+      sendTextMessage(senderID, "No goals yet, start one from home!");
       console.log("empty");
     } else {
       console.log('results');
       console.log(result);
+      sendList(senderID, result);
     }
   });
+}
+
+function sendList(senderID, result) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "list",
+          top_element_style: "compact",
+          elements: [
+            {
+            }
+          ]
+        }
+      }
+    }
+  };
+  for (var i = 0; i < result.length; i++) {
+    var goal = {
+      title: result[i].name
+      // default_action: {
+      //   type: postback
+      //   payload: result[i].name + " view"
+      // }
+    }
+    messageData.message.attachment.payload.elements.push(goal)
+  }
+  callSendAPI(messageData);
 }
 
 /*
@@ -416,7 +451,9 @@ function receivedPostback(event) {
   if (payload == "Payload new goal") {
     makeGoal(senderID);
   } else if (payload == "Payload view") {
-    goalList(senderID);
+    viewList(senderID);
+  } else if (payload.includes("view")) {
+    sendTextMessage(senderID, payload);
   }
 
 }
