@@ -400,21 +400,9 @@ function sendList(senderID, result) {
   };
   // First element for title
   var first = {
-                    "title": "Classic T-Shirt Collection",
-                    "image_url": SERVER_URL + "/assets/list.png",
-                    "subtitle": "See all our colors",
-                    "buttons": [
-                        {
-                            "title": "View",
-                            "type": "web_url",
-                            "url": SERVER_URL + "/assets/list.png",
-                        }
-                    ]
-                }
-  // var first = {
-  //   title: "Your Goals",
-  //   image_url: SERVER_URL + "/assets/list.png",
-  // }
+    title: "Your Goals:",
+    image_url: SERVER_URL + "/assets/list.png",
+  }
   messageData.message.attachment.payload.elements.push(first)
 
   // Rest of goals
