@@ -399,7 +399,7 @@ function sendList(senderID, result) {
   };
   // First element for title
   var first = {
-    title: result[i].name,
+    title: "Your Goals",
     image_url: SERVER_URL + "/assets/list.png",
   }
   messageData.message.attachment.payload.elements.push(first)
