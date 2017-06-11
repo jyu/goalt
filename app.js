@@ -401,21 +401,21 @@ function sendList(senderID, result) {
   // First element for title
   var first = {
                     "title": "Classic T-Shirt Collection",
-                    "image_url": "https://peterssendreceiveapp.ngrok.io/img/collection.png",
+                    "image_url": SERVER_URL + "/assets/list.png",
                     "subtitle": "See all our colors",
                     "default_action": {
                         "type": "web_url",
-                        "url": "https://peterssendreceiveapp.ngrok.io/shop_collection",
+                        "url": SERVER_URL + "/assets/list.png",
                         "webview_height_ratio": "tall",
-                        "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                        "fallback_url": SERVER_URL + "/assets/list.png"
                     },
                     "buttons": [
                         {
                             "title": "View",
                             "type": "web_url",
-                            "url": "https://peterssendreceiveapp.ngrok.io/collection",
+                            "url": SERVER_URL + "/assets/list.png",
                             "webview_height_ratio": "tall",
-                            "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                            "fallback_url": SERVER_URL + "/assets/list.png"
                         }
                     ]
                 }
