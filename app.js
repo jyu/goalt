@@ -403,19 +403,11 @@ function sendList(senderID, result) {
                     "title": "Classic T-Shirt Collection",
                     "image_url": SERVER_URL + "/assets/list.png",
                     "subtitle": "See all our colors",
-                    "default_action": {
-                        "type": "web_url",
-                        "url": SERVER_URL + "/assets/list.png",
-                        "webview_height_ratio": "tall",
-                        "fallback_url": SERVER_URL + "/assets/list.png"
-                    },
                     "buttons": [
                         {
                             "title": "View",
                             "type": "web_url",
                             "url": SERVER_URL + "/assets/list.png",
-                            "webview_height_ratio": "tall",
-                            "fallback_url": SERVER_URL + "/assets/list.png"
                         }
                     ]
                 }
