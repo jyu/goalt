@@ -374,6 +374,7 @@ function viewList(senderID) {
 }
 
 function sendList(senderID, result) {
+  console.log(senderID);
   var messageData = {
     recipient: {
       id: senderID
@@ -389,7 +390,7 @@ function sendList(senderID, result) {
           buttons: [
                 {
                   type: "postback",
-                  title: "Next",
+                  title: "View More",
                   payload: "Next view",
                 }
           ]
