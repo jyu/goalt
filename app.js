@@ -363,6 +363,7 @@ function viewList(senderID) {
   gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
     if (result == null || result.length == 0) {
       sendTextMessage(senderID, "No goals yet, start one from home!");
+      sendHome(senderID);
       console.log("empty");
     } else {
       console.log('results');
@@ -382,13 +383,28 @@ function sendList(senderID, result) {
         type: "template",
         payload: {
           template_type: "list",
-          top_element_style: "compact",
+          top_element_style: "large",
           elements: [
+          ],
+          buttons: [
+                {
+                  type: "postback",
+                  title: "Next",
+                  payload: "Next view",
+                }
           ]
         }
       }
     }
   };
+  // First element for title
+  var first = {
+    title: result[i].name,
+    image_url: SERVER_URL + "/assets/list.png",
+  }
+  messageData.message.attachment.payload.elements.push(first)
+
+  // Rest of goals
   for (var i = 0; i < result.length; i++) {
     var goal = {
       title: result[i].name,
