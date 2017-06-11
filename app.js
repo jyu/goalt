@@ -373,7 +373,7 @@ function viewList(senderID) {
   });
 }
 
-function sendList2(senderID, result) {
+function sendList(senderID, result) {
   console.log(senderID);
   var messageData = {
     recipient: {
