@@ -384,7 +384,7 @@ function sendList(senderID, result) {
         type: "template",
         payload: {
           template_type: "list",
-          top_element_style: "compact",
+          top_element_style: "large",
           elements: [
           ],
           buttons: [
@@ -400,9 +400,29 @@ function sendList(senderID, result) {
   };
   // First element for title
   var first = {
-    title: "Your Goals",
-    image_url: SERVER_URL + "/assets/list.png",
-  }
+                    "title": "Classic T-Shirt Collection",
+                    "image_url": "https://peterssendreceiveapp.ngrok.io/img/collection.png",
+                    "subtitle": "See all our colors",
+                    "default_action": {
+                        "type": "web_url",
+                        "url": "https://peterssendreceiveapp.ngrok.io/shop_collection",
+                        "webview_height_ratio": "tall",
+                        "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                    },
+                    "buttons": [
+                        {
+                            "title": "View",
+                            "type": "web_url",
+                            "url": "https://peterssendreceiveapp.ngrok.io/collection",
+                            "webview_height_ratio": "tall",
+                            "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
+                        }
+                    ]
+                }
+  // var first = {
+  //   title: "Your Goals",
+  //   image_url: SERVER_URL + "/assets/list.png",
+  // }
   messageData.message.attachment.payload.elements.push(first)
 
   // Rest of goals
