@@ -391,10 +391,32 @@ function viewList(senderID) {
 }
 
 function sendList(senderID, result) {
-    var message = "Here are your goals:\u000A"
+  var message = "Here are your goals:\u000A"
+  var quick = []
   for (var i = 1; i <= result.length; i++) {
-    message = message + String(i) + ". " + result[i].name + "\u000A";
+    message += String(i) + ". " + result[i].name
+    if (result[i].streak > 3) {
+      message += "(fire emoji) " + String(result[i].streak);
+    }
+    message +=  "\u000A";
+    quick.append({
+      "content_type":"text",
+      "title":result[i].name,
+      "payload":"view " + result[i]._id_
+    })
   }
+  message += "Tap on a goal to view more details"
+  var messageData = {
+    recipient: {
+      id: senderID
+    },
+    message: {
+      text: message,
+      quick_replies: quick
+    }
+  };
+
+  callSendAPI(messageData);
   sendTextMessage(senderID, message);
 }
 
