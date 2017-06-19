@@ -374,6 +374,7 @@ function viewList(senderID) {
 }
 
 function sendList(senderID, result) {
+  sendTextMessage(senderID, "Here are your goals: \u000A 1. Kap \u000A 2. xD")
   console.log(senderID);
   var messageData = {
     recipient: {
@@ -409,13 +410,14 @@ function sendList(senderID, result) {
   for (var i = 0; i < result.length; i++) {
     var goal = {
       title: result[i].name,
-      buttons: [
-                {
-                  type: "postback",
-                  title: "View",
-                  payload: result[i].name + " view",
-                }
-               ]
+      subtitle: result[i].streak
+      // buttons: [
+      //           {
+      //             type: "postback",
+      //             title: "View",
+      //             payload: result[i].name + " view",
+      //           }
+      //          ]
       // default_action: {
       //   type: postback
       //   payload: result[i].name + " view"

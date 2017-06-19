@@ -43,3 +43,6 @@ favorite
 
 
 add perma menu for going to home
+view goals -> just a streak list
+goals on main page
+
