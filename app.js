@@ -244,7 +244,9 @@ function receivedMessage(event) {
       console.log("new user");
       var newUser = new models.User({
         name: senderID,
-        status: "null"
+        status: "null",
+        numGoals: 0,
+        finished: []
       });
       newUser.save(function(err, result) {
         console.log("New user created");
