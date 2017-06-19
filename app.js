@@ -319,16 +319,22 @@ function receivedMessage(event) {
 
 // New Goal Functions:
 function makeGoal(senderID) {
-  models.User.update({name:senderID},
-  {$set:{status:'naming_goal'}},
-  function(err) {
-    sendTextMessage(senderID, "What is the name of your goal?");
+  models.User.findOne({name: senderID},
+  function(err, result) {
+    if (result.numGoals == 3) {
+      sendTextMessage(senderID, 'You have reached the maximum number of goals. Finish one or delete one to add more!');
+    } else {
+      models.User.update({name:senderID},
+      {$set:{status:'naming_goal'}},
+      function(err) {
+        sendTextMessage(senderID, "What is the name of your goal?");
+      });
+    }
   });
 }
 
 function nameGoal(senderID, messageText) {
   messageText = messageText.charAt(0).toUpperCase() + messageText.slice(1);
-
   gmodels.Goal.findOne({user:senderID, name:messageText}, function(err, result) {
     // Find if there already exists a goal
     if (result != null) {
@@ -354,6 +360,15 @@ function nameGoal(senderID, messageText) {
         });
       });
     }
+  });
+  // Update Goal Count
+  models.User.findOne({name: senderID},
+  function(err, result) {
+    models.User.update({name:senderID},
+    {$set:{numGoals:result.numGoals + 1}},
+    function(err) {
+      sendTextMessage(senderID, "What is the name of your goal?");
+    });
   });
 }
 
