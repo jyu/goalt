@@ -389,63 +389,11 @@ function viewList(senderID) {
 }
 
 function sendList(senderID, result) {
-  sendTextMessage(senderID, "Here are your goals: \u000A 1. Kap \u000A 2. xD")
-  console.log(senderID);
-  var messageData = {
-    recipient: {
-      id: senderID
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "list",
-          top_element_style: "large",
-          elements: [
-          ],
-          buttons: [
-                {
-                  type: "postback",
-                  title: "View More",
-                  payload: "Next view",
-                }
-          ]
-        }
-      }
-    }
-  };
-  // First element for title
-  var first = {
-    title: "Your Goals:",
-    image_url: SERVER_URL + "/assets/list.png",
+    var message = "Here are your goals:\u000A"
+  for (var i = 1; i <= result.length; i++) {
+    message = message + String(i) + ". " + result[i].name + "\u000A";
   }
-  messageData.message.attachment.payload.elements.push(first)
-
-  // Rest of goals
-  for (var i = 0; i < result.length; i++) {
-    var goal = {
-      title: result[i].name,
-      subtitle: result[i].streak
-      // buttons: [
-      //           {
-      //             type: "postback",
-      //             title: "View",
-      //             payload: result[i].name + " view",
-      //           }
-      //          ]
-      // default_action: {
-      //   type: postback
-      //   payload: result[i].name + " view"
-      // }
-    }
-    messageData.message.attachment.payload.elements.push(goal)
-    console.log(messageData.message.attachment.payload.elements)
-    console.log('added')
-  }
-  console.log("list i am sending")
-  console.log(messageData);
-  console.log(messageData.message.attachment.payload.elements)
-  callSendAPI(messageData);
+  sendTextMessage(senderID, message);
 }
 
 /*
