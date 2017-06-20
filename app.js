@@ -271,7 +271,7 @@ function receivedMessage(event) {
     // Quick Replies
     var payload = quickReply.payload;
     console.log("Quick reply for message %s with payload %s",
-      messageId, quickReplyPayload);
+      messageId, payload);
     if (payload.substring(0,4) == "view") {
       var id = payload.substring(5,payload.length);
       models.User.findOne({"_id": ObjectId(id)},
