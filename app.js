@@ -281,6 +281,13 @@ function receivedMessage(event) {
           console.log(result);
           sendGoal(senderID, result);
         });
+    } else if (payload.substring(0,4) == "prog") {
+      var id = payload.substring(5,payload.length);
+      gmodels.Goal.findOne({"_id": ObjectId(id)},
+        function(err, result) {
+          console.log(result);
+          addProg(senderID, result);
+        });
     }
     return;
   }
@@ -436,7 +443,7 @@ function sendList(senderID, result, type) {
   callSendAPI(messageData);
 }
 
-// Sending the individual goal
+// Sending the individual goal to view
 function sendGoal(senderID, goal) {
   var message = goal.name;
   if (result[i].streak >= 3) {
@@ -472,6 +479,13 @@ function sendGoal(senderID, goal) {
     }
   };
   callSendAPI(messageData);
+}
+
+// Adding progress to the individual goal
+function addProg(senderID, goal) {
+  // Streak updating
+  var time = d.getTime() / 1000
+  // if time - goal.lastUpdate
 }
 /*
  * Delivery Confirmation Event
