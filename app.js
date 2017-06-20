@@ -278,8 +278,8 @@ function receivedMessage(event) {
       var id = payload.substring(5,payload.length);
       gmodels.Goal.findOne({"_id": ObjectId(id)},
         function(err, result) {
-          sendTextMessage(result.name)
           console.log(result);
+          sendGoal(senderID, result);
         });
     }
     return;
@@ -386,8 +386,8 @@ function nameGoal(senderID, messageText) {
   });
 }
 
-// View Goal Functions:
-function viewList(senderID) {
+// View Goal / Add Prog Functions:
+function getList(senderID, type) {
   // Create new user or identify user
   gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
     if (result == null || result.length == 0) {
@@ -395,13 +395,13 @@ function viewList(senderID) {
       sendHome(senderID);
       console.log("empty");
     } else {
-      sendList(senderID, result);
+      sendList(senderID, result, type);
     }
   });
 }
 
 // Sending the first list
-function sendList(senderID, result) {
+function sendList(senderID, result, type) {
   // console.log('results');
   // console.log(result);
   var message = "Here are your goals:\u000A";
@@ -415,10 +415,14 @@ function sendList(senderID, result) {
     quick.push({
       "content_type":"text",
       "title":result[i].name,
-      "payload":"view " + result[i]._id
+      "payload": type + " " + result[i]._id
     })
   }
-  message += "Tap on a goal below to view more details";
+  if (type == "view") {
+    message += "Tap on a goal below to view more details.";
+  } else if (type == "prog") {
+    message += "Tap on a goal below to add progress to it!"
+  }
   var messageData = {
     recipient: {
       id: senderID
@@ -517,7 +521,9 @@ function receivedPostback(event) {
   if (payload == "Payload new goal") {
     makeGoal(senderID);
   } else if (payload == "Payload view") {
-    viewList(senderID);
+    getList(senderID, "view");
+  } else if (payload == "Payload progress") {
+    getList(senderID, "prog");
   } else if (payload.includes("view")) {
     sendTextMessage(senderID, payload);
   }
