@@ -396,13 +396,13 @@ function sendList(senderID, result) {
   for (var i = 1; i <= result.length; i++) {
     message += String(i) + ". " + result[i].name
     if (result[i].streak > 3) {
-      message += "(fire emoji) " + String(result[i].streak);
+      message += "🔥 " + String(result[i].streak);
     }
     message +=  "\u000A";
     quick.append({
       "content_type":"text",
       "title":result[i].name,
-      "payload":"view " + result[i]._id_
+      "payload":"view " + result[i]._id.$oid
     })
   }
   message += "Tap on a goal to view more details"
