@@ -269,10 +269,18 @@ function receivedMessage(event) {
     return;
   } else if (quickReply) {
     // Quick Replies
-    var quickReplyPayload = quickReply.payload;
+    var payload = quickReply.payload;
     console.log("Quick reply for message %s with payload %s",
       messageId, quickReplyPayload);
-    sendTextMessage(senderID, "Quick reply tapped");
+    if (payload.substring(0,4) == "view") {
+      var id = payload.substring(5,payload.length);
+      models.User.findOne({"_id": ObjectId(id)},
+        function(err, result) {
+          console.log(result);
+        });
+      }
+    }
+
     return;
   }
 
@@ -401,7 +409,6 @@ function sendList(senderID, result) {
     if (result[i].streak > 3) {
       message += "  🔥" + String(result[i].streak);
     }
-    message += "  🔥" + String(result[i].streak);
     message +=  "\u000A";
     quick.push({
       "content_type":"text",
@@ -409,7 +416,7 @@ function sendList(senderID, result) {
       "payload":"view " + result[i]._id
     })
   }
-  message += "Tap on a goal to view more details";
+  message += "Tap on a goal below to view more details";
   var messageData = {
     recipient: {
       id: senderID
