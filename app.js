@@ -395,10 +395,11 @@ function sendList(senderID, result) {
   var quick = []
   for (var i = 0; i < result.length; i++) {
     console.log(result[i])
-    message += String(i) + ". " + result[i].name
+    message += String(i+1) + ". " + result[i].name
     if (result[i].streak > 3) {
       message += "🔥 " + String(result[i].streak);
     }
+    message += "🔥 " + String(result[i].streak);
     message +=  "\u000A";
     quick.push({
       "content_type":"text",
@@ -418,7 +419,6 @@ function sendList(senderID, result) {
   };
 
   callSendAPI(messageData);
-  sendTextMessage(senderID, message);
 }
 
 /*
