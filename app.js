@@ -276,7 +276,7 @@ function receivedMessage(event) {
       messageId, payload);
     if (payload.substring(0,4) == "view") {
       var id = payload.substring(5,payload.length);
-      models.User.findOne({"_id": ObjectId(id)},
+      gmodels.Goal.findOne({"_id": ObjectId(id)},
         function(err, result) {
           console.log(result);
         });
