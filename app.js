@@ -399,10 +399,10 @@ function sendList(senderID, result) {
       message += "🔥 " + String(result[i].streak);
     }
     message +=  "\u000A";
-    quick.append({
+    quick.push({
       "content_type":"text",
       "title":result[i].name,
-      "payload":"view " + result[i]._id.$oid
+      "payload":"view " + result[i]._id
     })
   }
   message += "Tap on a goal to view more details"
