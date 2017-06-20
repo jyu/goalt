@@ -278,6 +278,7 @@ function receivedMessage(event) {
       var id = payload.substring(5,payload.length);
       gmodels.Goal.findOne({"_id": ObjectId(id)},
         function(err, result) {
+          sendTextMessage(result.name)
           console.log(result);
         });
     }
@@ -360,7 +361,8 @@ function nameGoal(senderID, messageText) {
         name: messageText,
         streak: 0,
         log: [],
-        lastUpdate: d.getTime() / 1000
+        lastUpdate: d.getTime() / 1000,
+        longestStreak: 0
       });
       newGoal.save(function() {
         console.log("new goal created");
@@ -398,6 +400,7 @@ function viewList(senderID) {
   });
 }
 
+// Sending the first list
 function sendList(senderID, result) {
   // console.log('results');
   // console.log(result);
@@ -405,7 +408,7 @@ function sendList(senderID, result) {
   var quick = [];
   for (var i = 0; i < result.length; i++) {
     message += String(i+1) + ". " + result[i].name;
-    if (result[i].streak > 3) {
+    if (result[i].streak >= 3) {
       message += "  🔥" + String(result[i].streak);
     }
     message +=  "\u000A";
@@ -429,6 +432,43 @@ function sendList(senderID, result) {
   callSendAPI(messageData);
 }
 
+// Sending the individual goal
+function sendGoal(senderID, goal) {
+  var message = goal.name;
+  if (result[i].streak >= 3) {
+    message += "  🔥" + String(result[i].streak);
+  }
+  var messageData = {
+    recipient: {
+      id: senderID
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: message,
+          buttons: [
+            {
+              type: "postback",
+              title: "View Logs",
+              payload: "Logs " + goal._id,
+            }, {
+              type: "postback",
+              title: "Finish Goal",
+              payload: "Finish " + goal._id,
+            }, {
+              type: "postback",
+              title: "Delete Goal",
+              payload: "Delete " + goal._id,
+            }
+          ]
+        }
+      }
+    }
+  };
+  callSendAPI(messageData);
+}
 /*
  * Delivery Confirmation Event
  *

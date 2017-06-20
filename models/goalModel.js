@@ -5,7 +5,8 @@ var goalSchema = mongoose.Schema({
   name: String,
   streak: Number,
   log: [String],
-  lastUpdate: Number
+  lastUpdate: Number,
+  longestStreak: Number,
 });
 
 var Goal = mongoose.model('Goal', goalSchema);
