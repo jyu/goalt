@@ -251,6 +251,7 @@ function receivedMessage(event) {
       newUser.save(function(err, result) {
         console.log("New user created");
         sendTextMessage(senderID, "Welcome, here is the home screen:")
+        sendHome(senderID);
       });
       return;
     }
@@ -323,7 +324,7 @@ function receivedMessage(event) {
 function makeGoal(senderID) {
   models.User.findOne({name: senderID},
   function(err, result) {
-    if (result.numGoals == 3) {
+    if (result.numGoals == 5) {
       sendTextMessage(senderID, 'You have reached the maximum number of goals. Finish one or delete one to add more!');
     } else {
       models.User.update({name:senderID},
@@ -397,9 +398,9 @@ function sendList(senderID, result) {
     console.log(result[i])
     message += String(i+1) + ". " + result[i].name
     if (result[i].streak > 3) {
-      message += "   🔥" + String(result[i].streak);
+      message += "  🔥" + String(result[i].streak);
     }
-    message += "   🔥" + String(result[i].streak);
+    message += "  🔥" + String(result[i].streak);
     message +=  "\u000A";
     quick.push({
       "content_type":"text",
