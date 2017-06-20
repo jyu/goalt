@@ -397,9 +397,9 @@ function sendList(senderID, result) {
     console.log(result[i])
     message += String(i+1) + ". " + result[i].name
     if (result[i].streak > 3) {
-      message += "🔥 " + String(result[i].streak);
+      message += "   🔥" + String(result[i].streak);
     }
-    message += "🔥 " + String(result[i].streak);
+    message += "   🔥" + String(result[i].streak);
     message +=  "\u000A";
     quick.push({
       "content_type":"text",
