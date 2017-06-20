@@ -393,7 +393,7 @@ function viewList(senderID) {
 function sendList(senderID, result) {
   var message = "Here are your goals:\u000A"
   var quick = []
-  for (var i = 1; i <= result.length; i++) {
+  for (var i = 0; i <= result.length; i++) {
     console.log(result[i])
     message += String(i) + ". " + result[i].name
     if (result[i].streak > 3) {
