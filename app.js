@@ -278,9 +278,7 @@ function receivedMessage(event) {
         function(err, result) {
           console.log(result);
         });
-      }
     }
-
     return;
   }
 
