@@ -325,7 +325,8 @@ function makeGoal(senderID) {
   models.User.findOne({name: senderID},
   function(err, result) {
     if (result.numGoals == 5) {
-      sendTextMessage(senderID, 'You have reached the maximum number of goals. Finish one or delete one to add more!');
+      sendTextMessage(senderID, 'You have reached the maximum number of goals. Finish one or delete one to add more! Going to home...');
+      sendHome(senderID);
     } else {
       models.User.update({name:senderID},
       {$set:{status:'naming_goal'}},
@@ -392,11 +393,11 @@ function viewList(senderID) {
 function sendList(senderID, result) {
   console.log('results');
   console.log(result);
-  var message = "Here are your goals:\u000A"
-  var quick = []
+  var message = "Here are your goals:\u000A";
+  var quick = [];
   for (var i = 0; i < result.length; i++) {
-    console.log(result[i])
-    message += String(i+1) + ". " + result[i].name
+    console.log(result[i]);
+    message += String(i+1) + ". " + result[i].name;
     if (result[i].streak > 3) {
       message += "  🔥" + String(result[i].streak);
     }
@@ -408,7 +409,7 @@ function sendList(senderID, result) {
       "payload":"view " + result[i]._id
     })
   }
-  message += "Tap on a goal to view more details"
+  message += "Tap on a goal to view more details";
   var messageData = {
     recipient: {
       id: senderID
