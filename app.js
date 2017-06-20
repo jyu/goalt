@@ -17,6 +17,8 @@ const
   https = require('https'),
   request = require('request');
 
+var ObjectId = require('mongodb').ObjectID;
+
 var app = express();
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
@@ -397,12 +399,11 @@ function viewList(senderID) {
 }
 
 function sendList(senderID, result) {
-  console.log('results');
-  console.log(result);
+  // console.log('results');
+  // console.log(result);
   var message = "Here are your goals:\u000A";
   var quick = [];
   for (var i = 0; i < result.length; i++) {
-    console.log(result[i]);
     message += String(i+1) + ". " + result[i].name;
     if (result[i].streak > 3) {
       message += "  🔥" + String(result[i].streak);
