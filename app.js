@@ -446,8 +446,8 @@ function sendList(senderID, result, type) {
 // Sending the individual goal to view
 function sendGoal(senderID, goal) {
   var message = goal.name;
-  if (result[i].streak >= 3) {
-    message += "  🔥" + String(result[i].streak);
+  if (goal.streak >= 3) {
+    message += "  🔥" + String(goal.streak);
   }
   var messageData = {
     recipient: {
