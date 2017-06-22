@@ -18,7 +18,7 @@ const
   request = require('request');
 
 var ObjectId = require('mongodb').ObjectID;
-
+var d = new Date();
 var app = express();
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
@@ -283,11 +283,7 @@ function receivedMessage(event) {
         });
     } else if (payload.substring(0,4) == "prog") {
       var id = payload.substring(5,payload.length);
-      gmodels.Goal.findOne({"_id": ObjectId(id)},
-        function(err, result) {
-          console.log(result);
-          addProg(senderID, result);
-        });
+      streakProcess(id, true);
     }
     return;
   }
@@ -361,7 +357,6 @@ function nameGoal(senderID, messageText) {
       sendTextMessage(senderID, "Goal with that name has already been created. Try another name.")
       return;
     } else {
-      var d = new Date();
       // Create Goal
       var newGoal = new gmodels.Goal({
         user: senderID,
@@ -369,6 +364,7 @@ function nameGoal(senderID, messageText) {
         streak: 0,
         log: [],
         lastUpdate: d.getTime() / 1000,
+        lastDay: d.getDay(),
         longestStreak: 0
       });
       newGoal.save(function() {
@@ -480,12 +476,51 @@ function sendGoal(senderID, goal) {
   };
   callSendAPI(messageData);
 }
+// Streak processing
+function streakProcess(id, add) {
+  gmodels.Goal.findOne({"_id": ObjectId(id)},
+    function(err, result) {
+      if (add) {
+        var inc = 1;
+      } else {
+        var inc = 0;
+      }
+      if streak(senderID, result, id) {
+        var newStreak = result.streak + inc;
+      } else {
+        var newStreak = inc;
+      }
+      if (result.longestStreak < newStreak) {
+        var longestStreak = newStreak;
+      } else {
+        var longestStreak = result.longestStreak;
+      }
 
+      gmodels.Goal.update({"_id": ObjectId(id)},
+      {$set:{streak:newStreak,
+             lastUpdate:d.getTime(),
+             lastDay:d.getDay(),
+             longestStreak:longestStreak}},
+      function(err) {
+        return;
+      });
+    });
+}
 // Adding progress to the individual goal
-function addProg(senderID, goal) {
+function streak(senderID, goal) {
   // Streak updating
-  var time = d.getTime() / 1000
-  // if time - goal.lastUpdate
+  var time = d.getTime() / 1000;
+  var day = d.getDay();
+  var diffDay = day - goal.lastDay;
+  var diffTime = time - goal.lastUpdate;
+
+  // Different date, less than 48 hrs
+  if ((diffDay  == 1 ||  diffDay == -6) && diffTime < 86400 * 2) {
+    // Add to streak
+    return true;
+  }
+  // Set to streak to 0
+  return false;
 }
 /*
  * Delivery Confirmation Event
