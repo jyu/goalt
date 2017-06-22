@@ -284,6 +284,11 @@ function receivedMessage(event) {
     } else if (payload.substring(0,4) == "prog") {
       var id = payload.substring(5,payload.length);
       streakProcess(id, true);
+      models.User.update({name:senderID},
+      {$set:{status:'logging_goal'}},
+      function(err) {
+        sendTextMessage(senderID, "Add a log message to your goal!");
+      });
     }
     return;
   }
