@@ -483,20 +483,23 @@ function sendGoal(senderID, goal) {
 }
 // Streak processing
 function streakProcess(id, add) {
+  if (add) {
+    var inc = 1;
+  } else {
+    var inc = 0;
+  }
   gmodels.Goal.findOne({"_id": ObjectId(id)},
     function(err, result) {
-      if (add) {
-        var inc = 1;
-      } else {
-        var inc = 0;
-      }
-      console.log(inc);
       if (streak(senderID, result, id)) {
         var newStreak = result.streak + inc;
       } else {
         var newStreak = inc;
       }
       if (result.longestStreak < newStreak) {
+      console.log("inc");
+      console.log(inc);
+      console.log("new streak")
+      console.log(newStreak);
         var longestStreak = newStreak;
       } else {
         var longestStreak = result.longestStreak;
