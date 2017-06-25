@@ -282,13 +282,14 @@ function receivedMessage(event) {
           sendGoal(senderID, result);
         });
     } else if (payload.substring(0,4) == "prog") {
+      sendTextMessage(senderID, "starting process");
       var id = payload.substring(5,payload.length);
       streakProcess(id, true);
-      models.User.update({name:senderID},
-      {$set:{status:'logging_goal'}},
-      function(err) {
-        sendTextMessage(senderID, "Add a log message to your goal!");
-      });
+      // models.User.update({name:senderID},
+      // {$set:{status:'logging_goal'}},
+      // function(err) {
+      //   sendTextMessage(senderID, "Add a log message to your goal!");
+      // });
     }
     return;
   }
@@ -314,6 +315,7 @@ function receivedMessage(event) {
                 case 'generic':
                   sendGenericMessage(senderID);
                 default:
+                  console.log("sending home")
                   sendHome(senderID);
               }
             }
@@ -496,10 +498,10 @@ function streakProcess(id, add) {
         var newStreak = inc;
       }
       if (result.longestStreak < newStreak) {
-      console.log("inc");
-      console.log(inc);
-      console.log("new streak")
-      console.log(newStreak);
+        console.log("inc");
+        console.log(inc);
+        console.log("new streak")
+        console.log(newStreak);
         var longestStreak = newStreak;
       } else {
         var longestStreak = result.longestStreak;
