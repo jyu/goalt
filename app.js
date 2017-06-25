@@ -490,7 +490,7 @@ function streakProcess(id, add) {
       } else {
         var inc = 0;
       }
-      if streak(senderID, result, id) {
+      if (streak(senderID, result, id)) {
         var newStreak = result.streak + inc;
       } else {
         var newStreak = inc;
