@@ -284,7 +284,7 @@ function receivedMessage(event) {
     } else if (payload.substring(0,4) == "prog") {
       sendTextMessage(senderID, "starting process");
       var id = payload.substring(5,payload.length);
-      streakProcess(id, true);
+      streakProcess(id, true, senderID);
       // models.User.update({name:senderID},
       // {$set:{status:'logging_goal'}},
       // function(err) {
@@ -484,7 +484,7 @@ function sendGoal(senderID, goal) {
   callSendAPI(messageData);
 }
 // Streak processing
-function streakProcess(id, add) {
+function streakProcess(id, add, senderID) {
   if (add) {
     var inc = 1;
   } else {
