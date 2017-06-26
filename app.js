@@ -115,6 +115,7 @@ app.post('/webhook', function (req, res) {
         } else if (messagingEvent.account_linking) {
           receivedAccountLink(messagingEvent);
         } else {
+          sendHome(senderID);
           console.log("Webhook received unknown messagingEvent: ", messagingEvent);
         }
       });
