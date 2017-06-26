@@ -512,7 +512,7 @@ function streakProcess(id, add, senderID) {
       if (res == "add") {
         var newStreak = result.streak + inc;
       } else if (res == "keep") {
-        var newStreak = result.streak;
+        var newStreak = Math.max(inc, result.streak);
       } else {
         var newStreak = inc;
       }
@@ -583,7 +583,7 @@ function sendMotivation(senderID) {
       dataR = data.data.children; //outputs object representing first page of GM subreddit
       for (var i = 0; i < dataR.length; i++) {
         if (dataR[i].data.link_flair_css_class == 'image') {
-          images.push(dataR[i]);
+          images.push(dataR[i].data);
         }
       }
       // Check if length of 0
