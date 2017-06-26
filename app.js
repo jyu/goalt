@@ -516,7 +516,7 @@ function streakProcess(id, add, senderID) {
       if (res == "add") {
         var newStreak = result.streak + inc;
       } else if (res == "keep") {
-        var newStreak == result.streak;
+        var newStreak = result.streak;
       } else {
         var newStreak = inc;
       }
