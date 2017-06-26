@@ -433,7 +433,6 @@ function getList(senderID, type) {
 function sendList(senderID, result, type) {
   // console.log('results');
   // console.log(result);
-  // processStreakOnList(result);
   var message = "Here are your goals:\u000A";
   var quick = [];
   for (var i = 0; i < result.length; i++) {
@@ -513,8 +512,11 @@ function streakProcess(id, add, senderID) {
   }
   gmodels.Goal.findOne({"_id": ObjectId(id)},
     function(err, result) {
-      if (streak(senderID, result, id)) {
+      var res = streak(senderID, result, id);
+      if (res == "add") {
         var newStreak = result.streak + inc;
+      } else if (res == "keep") {
+        var newStreak == result.streak;
       } else {
         var newStreak = inc;
       }
@@ -544,12 +546,14 @@ function streak(senderID, goal) {
   var diffTime = time - goal.lastUpdate;
 
   // Different date, less than 48 hrs
-  if ((diffDay == 0 || diffDay  == 1 ||  diffDay == -6) && diffTime < 86400 * 2) {
+  if ((diffDay  == 1 ||  diffDay == -6) && diffTime < 86400 * 2) {
     // Add to streak
-    return true;
+    return "add";
+  } else if (diffDay == 0) {
+    return "keep";
   }
   // Set to streak to 0
-  return false;
+  return "reset";
 }
 
 function logGoal(senderID, id, text) {
