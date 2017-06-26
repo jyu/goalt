@@ -282,14 +282,13 @@ function receivedMessage(event) {
           sendGoal(senderID, result);
         });
     } else if (payload.substring(0,4) == "prog") {
-      sendTextMessage(senderID, "starting process");
       var id = payload.substring(5,payload.length);
       streakProcess(id, true, senderID);
-      // models.User.update({name:senderID},
-      // {$set:{status:'logging_goal'}},
-      // function(err) {
-      //   sendTextMessage(senderID, "Add a log message to your goal!");
-      // });
+      models.User.update({name:senderID},
+      {$set:{status:'logging_goal'+id}},
+      function(err) {
+        sendTextMessage(senderID, "Add a log message to your goal!");
+      });
     }
     return;
   }
@@ -305,6 +304,10 @@ function receivedMessage(event) {
             // Statuses
             if (result.status == 'naming_goal') {
               nameGoal(senderID, messageText)
+            } else if (result.status.substring(0,12) == 'logging_goal') {
+              logGoal(senderID,
+                      result.status.substring(5,result.status.length),
+                      messageText);
             }
             if (result.status == 'null') {
               // Standard cases
@@ -405,7 +408,20 @@ function getList(senderID, type) {
       sendHome(senderID);
       console.log("empty");
     } else {
-      sendList(senderID, result, type);
+      // Update streaks
+      for (var i = 0; i < result.length; i++) {
+        streakProcess(result[i]._id, false, senderID)
+      }
+      // send list again
+      gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
+        if (result == null || result.length == 0) {
+          sendTextMessage(senderID, "No goals yet, start one from home!");
+          sendHome(senderID);
+          console.log("empty");
+        } else {
+          sendList(senderID, result, type);
+        }
+      });
     }
   });
 }
@@ -414,6 +430,7 @@ function getList(senderID, type) {
 function sendList(senderID, result, type) {
   // console.log('results');
   // console.log(result);
+  // processStreakOnList(result);
   var message = "Here are your goals:\u000A";
   var quick = [];
   for (var i = 0; i < result.length; i++) {
@@ -498,10 +515,7 @@ function streakProcess(id, add, senderID) {
         var newStreak = inc;
       }
       if (result.longestStreak < newStreak) {
-        console.log("inc");
-        console.log(inc);
-        console.log("new streak")
-        console.log(newStreak);
+
         var longestStreak = newStreak;
       } else {
         var longestStreak = result.longestStreak;
@@ -532,6 +546,10 @@ function streak(senderID, goal) {
   }
   // Set to streak to 0
   return false;
+}
+
+function logGoal(senderID, goalID, text) {
+  return true;
 }
 /*
  * Delivery Confirmation Event
