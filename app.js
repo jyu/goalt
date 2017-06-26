@@ -555,7 +555,7 @@ function logGoal(senderID, id, text) {
     var oldLog = result.log;
     oldLog.push(String(d.getMonth()) + '/' + d.getDate() + ' ' + text)
     gmodels.Goal.update({"_id": ObjectId(id)},
-      {$set:{log:newStreak}},
+      {$set:{log:oldLog}},
       function(err) {
         models.User.update({name:senderID},
           {$set:{status:'null'}},
