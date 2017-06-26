@@ -686,7 +686,7 @@ function sendHome(recipientId) {
           elements: [
             {
               title: "GoalT: A Goal Tracker For You",
-              subtitle: "Type anything or press (Y) to return Home",
+              subtitle: "Type anything or press 👍 to return Home",
               image_url: SERVER_URL + "/assets/home.png",
               buttons: [
                 {
