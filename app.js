@@ -285,7 +285,7 @@ function receivedMessage(event) {
       function(err) {
         sendTextMessage(senderID, "Add a log message to your goal!");
       });
-    } else if (payload == home) {
+    } else if (payload == "home") {
       sendHome(senderID);
     }
     return;
@@ -565,7 +565,7 @@ function logGoal(senderID, id, text) {
         models.User.update({name:senderID},
           {$set:{status:'null'}},
           function(err) {
-            sendTextMessage(senderID, "Log Added! Going to home");
+            sendTextMessage(senderID, "Log Added!");
             sendMotivation(senderID);
             // send motivation here
             // sendHome(senderID);
@@ -591,6 +591,7 @@ function sendMotivation(senderID) {
       // Check if length of 0
       if (images.length == 0) {
         console.log("none");
+        sendHome(senderID)
         return;
       }
       // sort by created time
