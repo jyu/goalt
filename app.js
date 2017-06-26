@@ -600,7 +600,7 @@ function sendMotivation(senderID) {
       });
       // update last time
       models.User.update({name:senderID},
-      {$set:{lastPicTime:images[0].created_utc}},
+      {$set:{lastPicTime:images[0].created_utc + 1}},
       function(err) {
         sendImageMessage(senderID, images[0].url);
       });
