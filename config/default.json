@@ -1,5 +1,5 @@
 {
-    "appSecret": "3bc2ac929897e4d9bb262a5c79b899b4",
+    "appSecret": "",
     "pageAccessToken": "EAAaIyVByREoBAIPR5Y7DkmP01EbIxbMZBOZBBgKS0btTXNHZA3NnQKNZAbWRsabPoR9l5UZCofAVoa8sqSNhbkqhjZBLlJaWqdYLYXwyKW2Sh2iePsSDGpzRquvZAl9rEnBvfJZBmH1ppt7w9xBXi4dwNiStTM0f4ZBF8zBA72d30YgZDZD",
     "validationToken": "goalt_verify_token",
     "serverURL": "https://goalt.herokuapp.com/"
