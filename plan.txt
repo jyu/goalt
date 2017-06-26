@@ -1,4 +1,4 @@
-Plans:
+xPlans:
 MVP *
 
 sign up new users
@@ -36,3 +36,10 @@ streak list
 
 social media links/ share
 NLP to get profile picture
+
+TODO:
+reddit add prog
+view logs
+delete goal
+finish goal
+test
