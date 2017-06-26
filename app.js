@@ -601,6 +601,7 @@ function sendMotivation(senderID) {
         return parseFloat(a.created_utc - b.created_utc);
       });
       // update last time
+      console.log(images[index].url);
       models.User.update({name:senderID},
       {$set:{lastPicTime:index + 1}},
       function(err) {
