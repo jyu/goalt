@@ -542,7 +542,7 @@ function streak(senderID, goal) {
   var diffTime = time - goal.lastUpdate;
 
   // Different date, less than 48 hrs
-  if ((diffDay  == 1 ||  diffDay == -6) && diffTime < 86400 * 2) {
+  if ((diffDay == 0 || diffDay  == 1 ||  diffDay == -6) && diffTime < 86400 * 2) {
     // Add to streak
     return true;
   }
