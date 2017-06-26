@@ -565,7 +565,7 @@ function logGoal(senderID, id, text) {
         models.User.update({name:senderID},
           {$set:{status:'null'}},
           function(err) {
-            sendTextMessage(senderID, "Log Added!");
+            sendTextMessage(senderID, "Log Added! Great job today!");
             sendMotivation(senderID);
             // send motivation here
             // sendHome(senderID);
@@ -598,9 +598,10 @@ function sendMotivation(senderID) {
       images.sort(function(a,b) {
         return parseFloat(a.created_utc - b.created_utc);
       });
+      console.log(images[0].created_utc);
       // update last time
       models.User.update({name:senderID},
-      {$set:{lastPicTime:images[0].created_utc + 1}},
+      {$set:{lastPicTime:images[0].created_utc + 10}},
       function(err) {
         sendImageMessage(senderID, images[0].url);
       });
