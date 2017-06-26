@@ -581,7 +581,7 @@ function sendMotivation(senderID) {
     var dataR;
     var images = [];
     // Get reddit data
-    reddit.r('GetMotivated').after(result.lastPicTime, function(err, data, res){
+    reddit.r('GetMotivated').before(result.lastPicTime, function(err, data, res){
       dataR = data.data.children; //outputs object representing first page of GM subreddit
       for (var i = 0; i < dataR.length; i++) {
         if (dataR[i].data.link_flair_css_class == 'image') {
@@ -601,7 +601,7 @@ function sendMotivation(senderID) {
       console.log(images[0].created_utc);
       // update last time
       models.User.update({name:senderID},
-      {$set:{lastPicTime:images[0].created_utc + 10}},
+      {$set:{lastPicTime:images[0].created_utc + 1}},
       function(err) {
         sendImageMessage(senderID, images[0].url);
       });
