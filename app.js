@@ -580,8 +580,9 @@ function sendMotivation(senderID) {
   models.User.findOne({name:senderID}, function(err, result) {
     var dataR;
     var images = [];
+    var index = result.lastPicTime;
     // Get reddit data
-    reddit.r('GetMotivated').before(result.lastPicTime, function(err, data, res){
+    reddit.r('GetMotivated', function(err, data, res){
       dataR = data.data.children; //outputs object representing first page of GM subreddit
       for (var i = 0; i < dataR.length; i++) {
         if (dataR[i].data.link_flair_css_class == 'image') {
@@ -594,16 +595,16 @@ function sendMotivation(senderID) {
         sendHome(senderID)
         return;
       }
+      index = index % images.length;
       // sort by created time
       images.sort(function(a,b) {
         return parseFloat(a.created_utc - b.created_utc);
       });
-      console.log(images[0].created_utc);
       // update last time
       models.User.update({name:senderID},
-      {$set:{lastPicTime:images[0].created_utc + 1}},
+      {$set:{lastPicTime:index + 1}},
       function(err) {
-        sendImageMessage(senderID, images[0].url);
+        sendImageMessage(senderID, images[index].url);
       });
     });
   });
