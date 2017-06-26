@@ -242,7 +242,8 @@ function receivedMessage(event) {
         name: senderID,
         status: "null",
         numGoals: 0,
-        finished: []
+        finished: [],
+        lastPic: 0
       });
       newUser.save(function(err, result) {
         console.log("New user created");
