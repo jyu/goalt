@@ -285,6 +285,8 @@ function receivedMessage(event) {
       function(err) {
         sendTextMessage(senderID, "Add a log message to your goal!");
       });
+    } else if (payload == home) {
+      sendHome(senderID);
     }
     return;
   }
@@ -599,7 +601,7 @@ function sendMotivation(senderID) {
       models.User.update({name:senderID},
       {$set:{lastPicTime:images[0].created_utc}},
       function(err) {
-        console.log(images[0].url);
+        sendImageMessage(senderID, images[0].url);
       });
     });
   });
@@ -808,7 +810,7 @@ function sendTextMessage(recipientId, messageText) {
  * Send an image using the Send API.
  *
  */
-function sendImageMessage(recipientId) {
+function sendImageMessage(recipientId, image_url) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -817,9 +819,16 @@ function sendImageMessage(recipientId) {
       attachment: {
         type: "image",
         payload: {
-          url: SERVER_URL + "/assets/rift.png"
+          url: image_url
         }
-      }
+      },
+      quick_replies: [
+        {
+          "content_type":"text",
+          "title":"Home",
+          "payload":"home"
+        }
+      ]
     }
   };
 
