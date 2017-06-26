@@ -602,8 +602,13 @@ function sendMotivation(senderID) {
       });
       // update last time
       console.log(images[index].url);
-      var preurl = images[index].url;
-      preurl = preurl.replace(".gifv", ".gif")
+      // var preurl = images[index].url;
+      // preurl = preurl.replace(".gifv", ".gif")
+      // console.log(preurl)
+      while (images[index].url.includes(".gif")) {
+        index += 1
+        index = index % images.length;
+      }
       models.User.update({name:senderID},
       {$set:{lastPicTime:index + 1}},
       function(err) {
