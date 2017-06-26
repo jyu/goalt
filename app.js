@@ -435,9 +435,10 @@ function sendList(senderID, result, type) {
   var quick = [];
   for (var i = 0; i < result.length; i++) {
     message += String(i+1) + ". " + result[i].name;
-    if (result[i].streak >= 3) {
-      message += "  🔥" + String(result[i].streak);
-    }
+    // if (result[i].streak >= 3) {
+    //   message += "  🔥" + String(result[i].streak);
+    // }
+    message += "  🔥" + String(result[i].streak);
     message +=  "\u000A";
     quick.push({
       "content_type":"text",
@@ -548,7 +549,24 @@ function streak(senderID, goal) {
   return false;
 }
 
-function logGoal(senderID, goalID, text) {
+function logGoal(senderID, id, text) {
+  gmodels.Goal.findOne({"_id": ObjectId(id)},
+  function(err, result) {
+    var oldLog = result.log;
+    oldLog.push(String(d.getMonth()) + '/' + d.getDate() + ' ' + text)
+    gmodels.Goal.update({"_id": ObjectId(id)},
+      {$set:{log:newStreak}},
+      function(err) {
+        models.User.update({name:senderID},
+          {$set:{status:'null'}},
+          function(err) {
+            sendTextMessage(senderID, "Log Added! Going to home");
+            // send motivation here
+            sendHome(senderID);
+        });
+        return;
+      });
+  });
   return true;
 }
 /*
