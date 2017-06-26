@@ -612,7 +612,7 @@ function sendMotivation(senderID) {
       models.User.update({name:senderID},
       {$set:{lastPicTime:index + 1}},
       function(err) {
-        sendImageMessage(senderID, preurl);
+        sendImageMessage(senderID, images[index].url);
       });
     });
   });
