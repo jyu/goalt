@@ -40,9 +40,7 @@ mongoose.connect(process.env.MONGOLAB_URI);
  */
 
 // App Secret can be retrieved from the App Dashboard
-const APP_SECRET = (process.env.MESSENGER_APP_SECRET) ?
-  process.env.MESSENGER_APP_SECRET :
-  process.env,APP_SECRET;
+const APP_SECRET = process.env,APP_SECRET;
 
 // Arbitrary value used to validate a webhook
 const VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN) ?
