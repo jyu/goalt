@@ -6,7 +6,7 @@ var userSchema = mongoose.Schema({
   status: String,
   numGoals: Number,
   finished: [String],
-  lastPic: Number
+  lastPicTime: Number
 });
 
 // For more complex logic, methods go here

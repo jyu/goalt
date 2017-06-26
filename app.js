@@ -17,6 +17,7 @@ const
   https = require('https'),
   request = require('request');
 
+var reddit = require('redwrap');
 var ObjectId = require('mongodb').ObjectID;
 var d = new Date();
 var app = express();
@@ -243,7 +244,7 @@ function receivedMessage(event) {
         status: "null",
         numGoals: 0,
         finished: [],
-        lastPic: 0
+        lastPicTime: 0
       });
       newUser.save(function(err, result) {
         console.log("New user created");
@@ -563,13 +564,44 @@ function logGoal(senderID, id, text) {
           {$set:{status:'null'}},
           function(err) {
             sendTextMessage(senderID, "Log Added! Going to home");
+            sendMotivation(senderID);
             // send motivation here
-            sendHome(senderID);
+            // sendHome(senderID);
         });
         return;
       });
   });
   return true;
+}
+
+function sendMotivation(senderID) {
+  models.User.findOne({name:senderID}, function(err, result) {
+    var dataR;
+    var images = [];
+    // Get reddit data
+    reddit.r('GetMotivated').after(result.lastPicTime, function(err, data, res){
+      dataR = data.data.children; //outputs object representing first page of GM subreddit
+      for (var i = 0; i < dataR.length; i++) {
+        if (dataR[i].link_flair_css_class == 'image') {
+          images.push(dataR[i]);
+        }
+      }
+      // Check if length of 0
+      if (images.length == 0) {
+        return;
+      }
+      // sort by created time
+      images.sort(function(a,b) {
+        return parseFloat(a.created_utc - b.created_utc);
+      });
+      // update last time
+      models.User.update({name:senderID},
+      {$set:{lastPicTime:images[0].created_utc}},
+      function(err) {
+        console.log(images[0].url);
+      });
+    });
+  });
 }
 /*
  * Delivery Confirmation Event
