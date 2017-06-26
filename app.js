@@ -582,12 +582,13 @@ function sendMotivation(senderID) {
     reddit.r('GetMotivated').after(result.lastPicTime, function(err, data, res){
       dataR = data.data.children; //outputs object representing first page of GM subreddit
       for (var i = 0; i < dataR.length; i++) {
-        if (dataR[i].link_flair_css_class == 'image') {
+        if (dataR[i].data.link_flair_css_class == 'image') {
           images.push(dataR[i]);
         }
       }
       // Check if length of 0
       if (images.length == 0) {
+        console.log("none");
         return;
       }
       // sort by created time
