@@ -305,6 +305,7 @@ function receivedMessage(event) {
             if (result.status == 'naming_goal') {
               nameGoal(senderID, messageText)
             } else if (result.status.substring(0,12) == 'logging_goal') {
+              console.log(result.status.substring(5,result.status.length))
               logGoal(senderID,
                       result.status.substring(5,result.status.length),
                       messageText);
