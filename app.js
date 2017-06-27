@@ -363,6 +363,7 @@ function makeGoal(senderID) {
 function nameGoal(senderID, messageText) {
   messageText = messageText.charAt(0).toUpperCase() + messageText.slice(1);
   gmodels.Goal.findOne({user:senderID, name:messageText}, function(err, result) {
+    var d = new Date();
     // Find if there already exists a goal
     if (result != null) {
       sendTextMessage(senderID, "Goal with that name has already been created. Try another name.")
@@ -503,6 +504,8 @@ function sendGoal(senderID, goal) {
 }
 // Streak processing
 function streakProcess(id, add, senderID) {
+  var d = new Date();
+
   if (add) {
     var inc = 1;
   } else {
@@ -537,6 +540,7 @@ function streakProcess(id, add, senderID) {
 }
 // Adding progress to the individual goal
 function streak(senderID, goal) {
+  var d = new Date();
   // Streak updating
   var time = d.getTime() / 1000;
   var day = d.getDay();
@@ -555,6 +559,7 @@ function streak(senderID, goal) {
 }
 
 function logGoal(senderID, id, text) {
+  var d = new Date();
   gmodels.Goal.findOne({"_id": ObjectId(id)},
   function(err, result) {
     var oldLog = result.log;
