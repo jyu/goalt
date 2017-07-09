@@ -316,8 +316,10 @@ function receivedMessage(event) {
                   break;
                 case 'generic':
                   sendGenericMessage(senderID);
+                  break;
                 case 'test':
                   sendTest(senderID);
+                  break;
                 default:
                   console.log("sending home")
                   sendHome(senderID);
@@ -861,7 +863,8 @@ function sendTest(senderID) {
   };
   request.get(options, function(error, response, body) {
     if (!error && response.statusCode === 200) {
-      console.log(body.devices)
+      console.log("devices:");
+      console.log(body.devices);
       // sendTextMessage(senderID, "Hi " + body.first_name + ", I am Anna the fashion bot. I can help you buy anything you see. Send me an image or message! :)");
       var messageData = {
         recipient: {
