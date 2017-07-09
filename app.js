@@ -868,7 +868,7 @@ function sendTest(senderID) {
           id: senderID
         },
         message: {
-          text: can.hello(body.first_name),
+          text:"hi " + body.first_name,
           quick_replies: [
             {
               "content_type":"text",
