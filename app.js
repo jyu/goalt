@@ -316,6 +316,8 @@ function receivedMessage(event) {
                   break;
                 case 'generic':
                   sendGenericMessage(senderID);
+                case 'test':
+                  sendTest(senderID);
                 default:
                   console.log("sending home")
                   sendHome(senderID);
@@ -850,6 +852,50 @@ function sendImageMessage(recipientId, image_url) {
 
   callSendAPI(messageData);
 }
+
+function sendTest(senderID) {
+  var url = 'https://graph.facebook.com/v2.6/' + senderID + '?access_token=' + PAGE_ACCESS_TOKEN;
+  var options = {
+    url: url,
+    json: true
+  };
+  request.get(options, function(error, response, body) {
+    if (!error && response.statusCode === 200) {
+      console.log(body.devices)
+      // sendTextMessage(senderID, "Hi " + body.first_name + ", I am Anna the fashion bot. I can help you buy anything you see. Send me an image or message! :)");
+      var messageData = {
+        recipient: {
+          id: senderID
+        },
+        message: {
+          text: can.hello(body.first_name),
+          quick_replies: [
+            {
+              "content_type":"text",
+              "title":"Image Search",
+              "payload":"imageSearch"
+            },
+            {
+              "content_type":"text",
+              "title":"Text Search",
+              "payload":"textSearch"
+            },
+            {
+              "content_type":"text",
+              "title":"Today's Sales",
+              "payload":"sale"
+            }
+          ]
+        }
+      };
+      callSendAPI(messageData);
+    } else {
+      console.log('user api error');
+    }
+  });
+
+}
+
 
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll
