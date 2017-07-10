@@ -279,7 +279,7 @@ function receivedMessage(event) {
         });
     } else if (payload.substring(0,4) == "prog") {
       var id = payload.substring(5,payload.length);
-      streakProcess(id, prog, senderID);
+      streakProcess(id, "prog", senderID);
       models.User.update({name:senderID},
       {$set:{status:'logging_goal'+id}},
       function(err) {
