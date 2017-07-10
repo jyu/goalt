@@ -416,7 +416,7 @@ function getList(senderID, type) {
     } else {
       // Update streaks
       for (var i = 0; i < result.length; i++) {
-        streakProcess(result[i]._id, false, senderID)
+        streakProcess(result[i]._id, type, senderID)
       }
       // send list again
       gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
@@ -507,10 +507,10 @@ function sendGoal(senderID, goal) {
   callSendAPI(messageData);
 }
 // Streak processing
-function streakProcess(id, add, senderID) {
+function streakProcess(id, type, senderID) {
   var d = new Date();
 
-  if (add) {
+  if (type == "prog") {
     var inc = 1;
   } else {
     var inc = 0;
