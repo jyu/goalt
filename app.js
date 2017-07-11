@@ -279,7 +279,7 @@ function receivedMessage(event) {
         });
     } else if (payload.substring(0,4) == "prog") {
       var id = payload.substring(5,payload.length);
-      streakProcess(id, "prog", senderID);
+      streakProcess(id, "view", senderID);
       models.User.update({name:senderID},
       {$set:{status:'logging_goal'+id}},
       function(err) {
@@ -532,15 +532,16 @@ function streakProcess(id, type, senderID) {
       } else {
         var longestStreak = result.longestStreak;
       }
-
-      gmodels.Goal.update({"_id": ObjectId(id)},
-      {$set:{streak:newStreak,
-             lastUpdate:d.getTime(),
-             lastDay:d.getDay(),
-             longestStreak:longestStreak}},
-      function(err) {
-        return;
-      });
+      if (type == "prog") {
+        gmodels.Goal.update({"_id": ObjectId(id)},
+        {$set:{streak:newStreak,
+               lastUpdate:d.getTime(),
+               lastDay:d.getDay(),
+               longestStreak:longestStreak}},
+        function(err) {
+          return;
+        });
+      }
     });
 }
 // Adding progress to the individual goal
