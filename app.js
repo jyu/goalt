@@ -510,7 +510,6 @@ function sendGoal(senderID, goal) {
 // Streak processing
 function streakProcess(id, type, senderID) {
   var d = new Date();
-
   if (type == "prog") {
     var inc = 1;
   } else {
@@ -527,7 +526,6 @@ function streakProcess(id, type, senderID) {
         var newStreak = inc;
       }
       if (result.longestStreak < newStreak) {
-
         var longestStreak = newStreak;
       } else {
         var longestStreak = result.longestStreak;
@@ -576,7 +574,7 @@ function logGoal(senderID, id, text) {
         models.User.update({name:senderID},
           {$set:{status:'null'}},
           function(err) {
-            sendTextMessage(senderID, "Log Added! Great job today!");
+            sendTextMessage(senderID, "Log Added! Great job today! Here's your daily dose of motivation:");
             sendMotivation(senderID);
             // send motivation here
             // sendHome(senderID);
@@ -596,7 +594,8 @@ function sendMotivation(senderID) {
     reddit.r('GetMotivated', function(err, data, res){
       dataR = data.data.children; //outputs object representing first page of GM subreddit
       for (var i = 0; i < dataR.length; i++) {
-        if (dataR[i].data.link_flair_css_class == 'image') {
+        if (dataR[i].data.link_flair_css_class == 'image' &&
+            dataR[i].data.score >= 20) {
           images.push(dataR[i].data);
         }
       }
@@ -620,6 +619,8 @@ function sendMotivation(senderID) {
         index += 1
         index = index % images.length;
       }
+      var name = images[index].title
+      sendTextMessage(senderID, name.substring(8,name.length))
       models.User.update({name:senderID},
       {$set:{lastPicTime:index + 1}},
       function(err) {
