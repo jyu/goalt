@@ -366,6 +366,10 @@ function makeGoal(senderID) {
 
 function nameGoal(senderID, messageText) {
   messageText = messageText.charAt(0).toUpperCase() + messageText.slice(1);
+  if (messageText.length > 100) {
+    sendTextMessage(senderID, "That goal name is too long. Try another name.")
+    return;
+  }
   gmodels.Goal.findOne({user:senderID, name:messageText}, function(err, result) {
     var d = new Date();
     // Find if there already exists a goal
@@ -492,15 +496,15 @@ function sendGoal(senderID, goal) {
                 {
                   type: "postback",
                   title: "View Logs",
-                  payload: "Logs " + goal._id,
+                  payload: "logs " + goal._id,
                 }, {
                   type: "postback",
                   title: "Finish Goal",
-                  payload: "Finish " + goal._id,
+                  payload: "finish " + goal._id,
                 }, {
                   type: "postback",
                   title: "Delete Goal",
-                  payload: "Delete " + goal._id,
+                  payload: "delete " + goal._id,
                 }
               ]
             }
@@ -562,6 +566,7 @@ function streak(senderID, goal) {
   return "reset";
 }
 
+// Adding a goal log
 function logGoal(senderID, id, text) {
   var d = new Date();
   gmodels.Goal.findOne({"_id": ObjectId(id)},
@@ -585,6 +590,7 @@ function logGoal(senderID, id, text) {
   return true;
 }
 
+// Send motivation after user adds progress
 function sendMotivation(senderID) {
   models.User.findOne({name:senderID}, function(err, result) {
     var dataR;
@@ -628,6 +634,10 @@ function sendMotivation(senderID) {
       });
     });
   });
+}
+
+function viewLogs(senderID, goal, index) {
+    var message = "Here are your logs for " goal.name
 }
 /*
  * Delivery Confirmation Event
@@ -680,8 +690,13 @@ function receivedPostback(event) {
     getList(senderID, "view");
   } else if (payload == "Payload progress") {
     getList(senderID, "prog");
-  } else if (payload.includes("view")) {
-    sendTextMessage(senderID, payload);
+  } else if (payload.substring(0,4) == "logs") {
+      var id = payload.substring(5,payload.length);
+      gmodels.Goal.findOne({"_id": ObjectId(id)},
+        function(err, result) {
+          console.log(result);
+          viewLogs(senderID, result, 0);
+        });
   }
 
 }
