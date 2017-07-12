@@ -285,6 +285,14 @@ function receivedMessage(event) {
       function(err) {
         sendTextMessage(senderID, "Add a log message to your goal!");
       });
+    } else if (payload.substring(0,4) == "logs") {
+      var index = payload[4];
+      var id = payload.substring(5,payload.length);
+      gmodels.Goal.findOne({"_id": ObjectId(id)},
+        function(err, result) {
+          console.log(result);
+          viewLogs(senderID, result, index);
+        });
     } else if (payload == "home") {
       sendHome(senderID);
     }
@@ -658,7 +666,7 @@ function viewLogs(senderID, goal, index) {
             {
               "content_type":"text",
               "title":"View Next Logs",
-              "payload":"view" + String(index + 5) + goal._id
+              "payload":"logs" + String(index + 5) + goal._id
             });
     }
     if (index - 5 >= 0) {
@@ -666,7 +674,7 @@ function viewLogs(senderID, goal, index) {
             {
               "content_type":"text",
               "title":"View Previous Logs",
-              "payload":"view" + String(index - 5) + goal._id
+              "payload":"logs" + String(index - 5) + goal._id
             });
     }
 
