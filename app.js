@@ -487,7 +487,7 @@ function sendGoal(senderID, goal) {
           template_type: "generic",
           elements: [
             {
-              title: "message",
+              title: message,
               buttons: [
                 {
                   type: "postback",
@@ -571,7 +571,7 @@ function logGoal(senderID, id, text) {
   gmodels.Goal.findOne({"_id": ObjectId(id)},
   function(err, result) {
     var oldLog = result.log;
-    oldLog.push(String(d.getMonth()) + '/' + d.getDate() + ' ' + text)
+    oldLog.unshift(String(d.getMonth()) + '/' + d.getDate() + ' ' + text)
     gmodels.Goal.update({"_id": ObjectId(id)},
       {$set:{log:oldLog}},
       function(err) {

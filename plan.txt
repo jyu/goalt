@@ -55,7 +55,8 @@ button for 5 previous, button for home
 
 Finish Goal:
 name + streak saved to list
-add a list in structued message in menu to show finished goals
+view list of finished goals in view goals (640 char limit)
+
 
 Delete goal docs:
 As of "mongoose": ">=2.7.1" you can remove the document directly with the .remove() method rather than finding the document and then removing it which seems to me more efficient and easy to maintain.
