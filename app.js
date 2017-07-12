@@ -279,7 +279,7 @@ function receivedMessage(event) {
         });
     } else if (payload.substring(0,4) == "prog") {
       var id = payload.substring(5,payload.length);
-      streakProcess(id, "view", senderID);
+      streakProcess(id, "prog", senderID);
       models.User.update({name:senderID},
       {$set:{status:'logging_goal'+id}},
       function(err) {
@@ -679,7 +679,7 @@ function receivedPostback(event) {
   } else if (payload == "Payload view") {
     getList(senderID, "view");
   } else if (payload == "Payload progress") {
-    getList(senderID, "prog");
+    getList(senderID, "view");
   } else if (payload.includes("view")) {
     sendTextMessage(senderID, payload);
   }
