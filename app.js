@@ -381,7 +381,7 @@ function nameGoal(senderID, messageText) {
         log: [],
         lastUpdate: d.getTime() / 1000,
         lastDay: d.getDay(),
-        longestStreak: 0
+        total: 0
       });
       newGoal.save(function() {
         console.log("new goal created");
@@ -529,17 +529,13 @@ function streakProcess(id, type, senderID) {
       } else {
         var newStreak = inc;
       }
-      if (result.longestStreak < newStreak) {
-        var longestStreak = newStreak;
-      } else {
-        var longestStreak = result.longestStreak;
-      }
+      var total = result.total + inc
       if (type == "prog") {
         gmodels.Goal.update({"_id": ObjectId(id)},
         {$set:{streak:newStreak,
                lastUpdate:d.getTime(),
                lastDay:d.getDay(),
-               longestStreak:longestStreak}},
+               total:total}},
         function(err) {
           return;
         });

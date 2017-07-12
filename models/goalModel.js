@@ -7,7 +7,7 @@ var goalSchema = mongoose.Schema({
   log: [String],
   lastUpdate: Number,
   lastDay: Number,
-  longestStreak: Number
+  total: Number
 });
 
 var Goal = mongoose.model('Goal', goalSchema);
