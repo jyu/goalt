@@ -388,7 +388,7 @@ function nameGoal(senderID, messageText) {
         models.User.update({name:senderID},
           {$set:{status:'null'}},
           function(err) {
-            sendTextMessage(senderID, "Goal " + messageText + " Added! Going to home");
+            sendTextMessage(senderID, "Goal " + messageText + " Added. Be sure to add progress to it every day to build up your goal streak! Going to home");
             sendHome(senderID);
         });
       });
@@ -620,7 +620,7 @@ function sendMotivation(senderID) {
         index = index % images.length;
       }
       var name = images[index].title
-      sendTextMessage(senderID, name.substring(8,name.length))
+      sendTextMessage(senderID, name.substring(7,name.length))
       models.User.update({name:senderID},
       {$set:{lastPicTime:index + 1}},
       function(err) {

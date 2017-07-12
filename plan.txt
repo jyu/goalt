@@ -1,3 +1,14 @@
+DONE:
+reddit add prog
+reddit title
+
+TODO:
+view logs
+delete goal
+finish goal
+test
+
+IDEAS/ BRAINSTORMING:
 xPlans:
 MVP *
 
@@ -16,7 +27,6 @@ heroku scheduler
 *daily motivation pics from reddit
 delete goals
 
-make page tokens SECRET
 clear account/ restart
 view status for goals
   start date
@@ -35,13 +45,28 @@ goals list
 streak list
 
 social media links/ share
-NLP to get profile picture
+NLP to get profile picture of goal
 
-TODO:
-reddit add prog
-view logs
-delete goal
-finish goal
-test
 
-reddit title
+TODO DETAILS:
+view logs:
+show last 5 with newline char
+button for 5 previous, button for home
+
+Finish Goal:
+name + streak saved to list
+add a list in structued message in menu to show finished goals
+
+Delete goal docs:
+As of "mongoose": ">=2.7.1" you can remove the document directly with the .remove() method rather than finding the document and then removing it which seems to me more efficient and easy to maintain.
+
+See example:
+
+Model.remove({ _id: req.body.id }, function(err) {
+    if (!err) {
+            message.type = 'notification!';
+    }
+    else {
+            message.type = 'error';
+    }
+});
