@@ -679,7 +679,7 @@ function receivedPostback(event) {
   } else if (payload == "Payload view") {
     getList(senderID, "view");
   } else if (payload == "Payload progress") {
-    getList(senderID, "view");
+    getList(senderID, "prog");
   } else if (payload.includes("view")) {
     sendTextMessage(senderID, payload);
   }
