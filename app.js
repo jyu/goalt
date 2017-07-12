@@ -484,21 +484,25 @@ function sendGoal(senderID, goal) {
       attachment: {
         type: "template",
         payload: {
-          template_type: "button",
-          text: message,
-          buttons: [
+          template_type: "generic",
+          elements: [
             {
-              type: "postback",
-              title: "View Logs",
-              payload: "Logs " + goal._id,
-            }, {
-              type: "postback",
-              title: "Finish Goal",
-              payload: "Finish " + goal._id,
-            }, {
-              type: "postback",
-              title: "Delete Goal",
-              payload: "Delete " + goal._id,
+              title: "message",
+              buttons: [
+                {
+                  type: "postback",
+                  title: "View Logs",
+                  payload: "Logs " + goal._id,
+                }, {
+                  type: "postback",
+                  title: "Finish Goal",
+                  payload: "Finish " + goal._id,
+                }, {
+                  type: "postback",
+                  title: "Delete Goal",
+                  payload: "Delete " + goal._id,
+                }
+              ]
             }
           ]
         }
@@ -574,7 +578,7 @@ function logGoal(senderID, id, text) {
         models.User.update({name:senderID},
           {$set:{status:'null'}},
           function(err) {
-            sendTextMessage(senderID, "Log Added! Great job today! Here's your daily dose of motivation:");
+            sendTextMessage(senderID, "Log Added! Great job today! Here's your daily dose of motivation from /r/GetMotivated:");
             sendMotivation(senderID);
             // send motivation here
             // sendHome(senderID);
