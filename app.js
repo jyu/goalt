@@ -568,6 +568,10 @@ function streak(senderID, goal) {
 
 // Adding a goal log
 function logGoal(senderID, id, text) {
+  if (text.length > 96) {
+    sendTextMessage(senderID, "That goal log is too long. Try another log.");
+    return;
+  }
   var d = new Date();
   gmodels.Goal.findOne({"_id": ObjectId(id)},
   function(err, result) {
@@ -608,7 +612,7 @@ function sendMotivation(senderID) {
       // Check if length of 0
       if (images.length == 0) {
         console.log("none");
-        sendHome(senderID)
+        sendHome(senderID);
         return;
       }
       index = index % images.length;
@@ -622,11 +626,11 @@ function sendMotivation(senderID) {
       // preurl = preurl.replace(".gifv", ".gif")
       // console.log(preurl)
       while (images[index].url.includes(".gif")) {
-        index += 1
+        index += 1;
         index = index % images.length;
       }
-      var name = images[index].title
-      sendTextMessage(senderID, name.substring(7,name.length))
+      var name = images[index].title;
+      sendTextMessage(senderID, name.substring(7,name.length));
       models.User.update({name:senderID},
       {$set:{lastPicTime:index + 1}},
       function(err) {
@@ -637,7 +641,39 @@ function sendMotivation(senderID) {
 }
 
 function viewLogs(senderID, goal, index) {
-    var message = "Here are your logs for " goal.name
+    var message = "Here are your logs for " goal.name + "\u000A";
+    for (var i = index, i < Math.max(log.length, index + 5), i++) {
+        message += goal.log[i];
+        message +=  "\u000A";
+
+
+    var messageData = {
+        recipient: {
+          id: senderID
+        },
+        message: {
+          text:message,
+          quick_replies: [
+            {
+              "content_type":"text",
+              "title":"View Previous Logs",
+              "payload":"imageSearch"
+            },
+            {
+              "content_type":"text",
+              "title":"View Next Logs",
+              "payload":"textSearch"
+            },
+            {
+              "content_type":"text",
+              "title":"Home",
+              "payload":"home"
+            }
+          ]
+        }
+    };
+      callSendAPI(messageData);
+    }
 }
 /*
  * Delivery Confirmation Event

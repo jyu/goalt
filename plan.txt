@@ -53,6 +53,8 @@ view logs:
 show last 5 with newline char
 button for 5 previous, button for home
 
+(try maxing out the logs and goal name to see if lenght limits are good enough)
+
 Finish Goal:
 name + streak saved to list
 view list of finished goals in view goals (640 char limit)
