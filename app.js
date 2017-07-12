@@ -416,7 +416,7 @@ function getList(senderID, type) {
     } else {
       // Update streaks
       for (var i = 0; i < result.length; i++) {
-        streakProcess(result[i]._id, type, senderID)
+        streakProcess(result[i]._id, "view", senderID)
       }
       // send list again
       gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
