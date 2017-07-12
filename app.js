@@ -642,10 +642,33 @@ function sendMotivation(senderID) {
 
 function viewLogs(senderID, goal, index) {
     var message = "Here are your logs for " goal.name + "\u000A";
-    for (var i = index, i < Math.max(log.length, index + 5), i++) {
+    for (var i = index, i < Math.max(goal.log.length, index + 5), i++) {
         message += goal.log[i];
         message +=  "\u000A";
 
+    var quickReply = [
+            {
+              "content_type":"text",
+              "title":"Home",
+              "payload":"home"
+            }];
+
+    if (index + 5 < goal.log.length) {
+        quickReply.unshift(
+            {
+              "content_type":"text",
+              "title":"View Next Logs",
+              "payload":"view" + String(index + 5) + goal._id
+            });
+    }
+    if (index - 5 >= 0) {
+        quickReply.unshift(
+            {
+              "content_type":"text",
+              "title":"View Previous Logs",
+              "payload":"view" + String(index - 5) + goal._id
+            });
+    }
 
     var messageData = {
         recipient: {
@@ -653,23 +676,7 @@ function viewLogs(senderID, goal, index) {
         },
         message: {
           text:message,
-          quick_replies: [
-            {
-              "content_type":"text",
-              "title":"View Previous Logs",
-              "payload":"imageSearch"
-            },
-            {
-              "content_type":"text",
-              "title":"View Next Logs",
-              "payload":"textSearch"
-            },
-            {
-              "content_type":"text",
-              "title":"Home",
-              "payload":"home"
-            }
-          ]
+          quick_replies: quickReply
         }
     };
       callSendAPI(messageData);
