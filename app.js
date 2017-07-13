@@ -649,7 +649,7 @@ function sendMotivation(senderID) {
         try {
           sendImageMessage(senderID, images[index].url);
         }
-        catch {
+        catch(e) {
           sendTextMessage(senderID, images[index].url)
         }
       });

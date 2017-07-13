@@ -61,6 +61,8 @@ view list of finished goals in view goals (640 char limit)
 
 
 Delete goal docs:
+subtract from total goals
+
 As of "mongoose": ">=2.7.1" you can remove the document directly with the .remove() method rather than finding the document and then removing it which seems to me more efficient and easy to maintain.
 
 See example:
