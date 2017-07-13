@@ -286,8 +286,9 @@ function receivedMessage(event) {
         sendTextMessage(senderID, "Add a log message to your goal!");
       });
     } else if (payload.substring(0,4) == "logs") {
-      var index = payload[4];
-      var id = payload.substring(5,payload.length);
+      var stop = payload.indexOf("!")
+      var index = parseInt(payload.substring(4,stop));
+      var id = payload.substring(stop+1,payload.length);
       gmodels.Goal.findOne({"_id": ObjectId(id)},
         function(err, result) {
           console.log(result);
@@ -535,8 +536,10 @@ function streakProcess(id, type, senderID) {
     function(err, result) {
       var res = streak(senderID, result, id);
       if (res == "add") {
+        console.log("add")
         var newStreak = result.streak + inc;
       } else if (res == "keep") {
+        console.log("keep")
         var newStreak = Math.max(inc, result.streak);
       } else {
         var newStreak = inc;
@@ -666,7 +669,7 @@ function viewLogs(senderID, goal, index) {
             {
               "content_type":"text",
               "title":"View Next Logs",
-              "payload":"logs" + String(index + 5) + goal._id
+              "payload":"logs" + String(index + 5) + "!" + goal._id
             });
     }
     if (index - 5 >= 0) {
@@ -674,7 +677,7 @@ function viewLogs(senderID, goal, index) {
             {
               "content_type":"text",
               "title":"View Previous Logs",
-              "payload":"logs" + String(index - 5) + goal._id
+              "payload":"logs" + String(index - 5) + "!" + goal._id
             });
     }
 
