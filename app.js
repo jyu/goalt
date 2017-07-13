@@ -650,10 +650,10 @@ function sendMotivation(senderID) {
 
 function viewLogs(senderID, goal, index) {
     var message = "Here are your logs for " + goal.name + "\u000A";
-    for (var i = index; i < Math.max(goal.log.length, index + 5); i++) {
+    for (var i = index; i < Math.min(goal.log.length, index + 5); i++) {
         message += goal.log[i];
         message +=  "\u000A";
-
+    }
     var quickReply = [
             {
               "content_type":"text",
@@ -687,8 +687,7 @@ function viewLogs(senderID, goal, index) {
           quick_replies: quickReply
         }
     };
-      callSendAPI(messageData);
-    }
+    callSendAPI(messageData);
 }
 /*
  * Delivery Confirmation Event
