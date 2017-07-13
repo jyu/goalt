@@ -646,10 +646,12 @@ function sendMotivation(senderID) {
       models.User.update({name:senderID},
       {$set:{lastPicTime:index + 1}},
       function(err) {
-        try:
+        try {
           sendImageMessage(senderID, images[index].url);
-        except:
+        }
+        catch {
           sendTextMessage(senderID, images[index].url)
+        }
       });
     });
   });
