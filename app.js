@@ -928,8 +928,12 @@ function sendImageMessage(recipientId, image_url) {
       ]
     }
   };
-
-  callSendAPI(messageData);
+  try {
+    callSendAPI(messageData);
+  }
+  catch(e) {
+    sendTextMessage(recipientId, image_url);
+  }
 }
 
 function sendTest(senderID) {
