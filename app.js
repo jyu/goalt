@@ -1006,6 +1006,7 @@ function callSendAPI(messageData) {
         recipientId);
       }
     } else {
+      sendHome(recipientId);
       console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
     }
   });
