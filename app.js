@@ -537,6 +537,7 @@ function streakProcess(id, type, senderID) {
       var res = streak(senderID, result, id);
       if (res == "add") {
         console.log("add")
+        console.log(inc)
         var newStreak = result.streak + inc;
       } else if (res == "keep") {
         console.log("keep")
@@ -645,7 +646,10 @@ function sendMotivation(senderID) {
       models.User.update({name:senderID},
       {$set:{lastPicTime:index + 1}},
       function(err) {
-        sendImageMessage(senderID, images[index].url);
+        try:
+          sendImageMessage(senderID, images[index].url);
+        except:
+          sendTextMessage(senderID, images[index].url)
       });
     });
   });
