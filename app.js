@@ -637,7 +637,10 @@ function sendMotivation(senderID) {
       // var preurl = images[index].url;
       // preurl = preurl.replace(".gifv", ".gif")
       // console.log(preurl)
-      while (images[index].url.includes("imgur")) {
+      while (images[index].url.includes("imgur") &&
+             (!images[index].url.includes("png") ||
+              !images[index].url.includes("jpg") ||
+              !images[index].url.includes("jpeg"))) {
         index += 1;
         index = index % images.length;
       }
