@@ -302,8 +302,15 @@ function receivedMessage(event) {
       gmodels.Goal.remove({"_id": ObjectId(id)},
         function(err, result) {
           if (!err) {
-            sendTextMessage(senderID, "Goal deleted!, going to home...");
-            sendHome(senderID);
+            models.User.findOne({name: senderID},
+            function(err, result) {
+              models.User.update({name:senderID},
+              {$set:{numGoals:result.numGoals - 1}},
+              function(err) {
+                sendTextMessage(senderID, "Goal deleted!, going to home...");
+                sendHome(senderID);
+              });
+            });
           }
           else {
             sendTextMessage(senderID, "There was an error deleting your goal, please try again, going to home...")
