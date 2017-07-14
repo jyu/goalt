@@ -294,6 +294,24 @@ function receivedMessage(event) {
           console.log(result);
           viewLogs(senderID, result, index);
         });
+    } else if (payload.substring(0,4) == "no  ") {
+      sendTextMessage(senderID, "Deleting canceled, going to home...");
+      sendHome(senderID);
+    } else if (payload.substring(0,4) == "yes ") {
+      var id = payload.substring(5,payload.length);
+      gmodels.Goal.remove({"_id": ObjectId(id)},
+        function(err, result) {
+          if (!err) {
+            sendTextMessage(senderID, "Goal deleted!, going to home...");
+            sendHome(senderID);
+          }
+          else {
+            sendTextMessage(senderID, "There was an error deleting your goal, please try again, going to home...")
+            sendHome(senderID);
+          }
+        });
+
+      deleteGoal(senderID, id);
     } else if (payload == "home") {
       sendHome(senderID);
     }
@@ -705,27 +723,31 @@ function viewLogs(senderID, goal, index) {
 }
 
 function sendConfirm(senderID, id) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      text: "Are you sure you want to delete this goal?",
-      quick_replies: [
-        {
-          "content_type":"text",
-          "title":"Yes",
-          "payload":"yes  " + id
-        },
-        {
-          "content_type":"text",
-          "title":"No",
-          "payload":"no   " + id
-        }
-      ]
-    }
-  };
-  callSendAPI(messageData);
+  gmodels.Goal.findOne({"_id": ObjectId(id)},
+  function(err, result) {
+    var messageData = {
+      recipient: {
+        id: recipientId
+      },
+      message: {
+        text: "Are you sure you want to delete " + result.name + "?",
+        quick_replies: [
+          {
+            "content_type":"text",
+            "title":"Yes",
+            "payload":"yes  " + id
+          },
+          {
+            "content_type":"text",
+            "title":"No",
+            "payload":"no   " + id
+          }
+        ]
+      }
+    };
+    callSendAPI(messageData);
+  });
+
 }
 
 /*
