@@ -661,7 +661,8 @@ function sendMotivation(senderID) {
 }
 
 function viewLogs(senderID, goal, index) {
-    var message = "Here are your logs for " + goal.name + "\u000A";
+    var message = "Here are your logs for " + goal.name +
+                  "(Page " + (index/5 + 1) ")\u000A";
     for (var i = index; i < Math.min(goal.log.length, index + 5); i++) {
         message += goal.log[i];
         message +=  "\u000A";
