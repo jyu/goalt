@@ -401,7 +401,7 @@ function nameGoal(senderID, messageText) {
         models.User.update({name:senderID},
           {$set:{status:'null'}},
           function(err) {
-            sendTextMessage(senderID, "Goal " + messageText + " Added. Be sure to add progress to it every day to build up your goal streak! Going to home");
+            sendTextMessage(senderID, "Goal " + messageText + " Added. Be sure to add progress to it every day to build up your goal streak! Going to home...");
             sendHome(senderID);
         });
       });
@@ -637,7 +637,7 @@ function sendMotivation(senderID) {
       // var preurl = images[index].url;
       // preurl = preurl.replace(".gifv", ".gif")
       // console.log(preurl)
-      while (images[index].url.includes(".gif")) {
+      while (images[index].url.includes("imgur")) {
         index += 1;
         index = index % images.length;
       }
