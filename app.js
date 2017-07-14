@@ -186,6 +186,7 @@ function verifyRequestSignature(req, res, buf) {
  */
 function receivedAuthentication(event) {
   var senderID = event.sender.id;
+  console.log(senderID);
   var recipientID = event.recipient.id;
   var timeOfAuth = event.timestamp;
 
