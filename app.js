@@ -513,7 +513,7 @@ function sendGoal(senderID, goal) {
                 }, {
                   type: "postback",
                   title: "Delete Goal",
-                  payload: "delete " + goal._id,
+                  payload: "dele " + goal._id,
                 }
               ]
             }
@@ -617,7 +617,7 @@ function sendMotivation(senderID) {
       dataR = data.data.children; //outputs object representing first page of GM subreddit
       for (var i = 0; i < dataR.length; i++) {
         if (dataR[i].data.link_flair_css_class == 'image' &&
-            dataR[i].data.score >= 20) {
+            dataR[i].data.score >= 50) {
           images.push(dataR[i].data);
         }
       }
@@ -750,6 +750,13 @@ function receivedPostback(event) {
   } else if (payload == "Payload progress") {
     getList(senderID, "prog");
   } else if (payload.substring(0,4) == "logs") {
+      var id = payload.substring(5,payload.length);
+      gmodels.Goal.findOne({"_id": ObjectId(id)},
+        function(err, result) {
+          console.log(result);
+          viewLogs(senderID, result, 0);
+        });
+  } else if (payload.substring(0,4) == "dele") {
       var id = payload.substring(5,payload.length);
       gmodels.Goal.findOne({"_id": ObjectId(id)},
         function(err, result) {
