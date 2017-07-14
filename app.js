@@ -660,48 +660,74 @@ function sendMotivation(senderID) {
   });
 }
 
+// View goal logs
 function viewLogs(senderID, goal, index) {
-    var message = "Here are your logs for " + goal.name +
-                  "(Page " + (index/5 + 1) ")\u000A";
-    for (var i = index; i < Math.min(goal.log.length, index + 5); i++) {
-        message += goal.log[i];
-        message +=  "\u000A";
-    }
-    var quickReply = [
-            {
-              "content_type":"text",
-              "title":"Home",
-              "payload":"home"
-            }];
+  var message = "Here are your logs for " + goal.name +
+                "(Page " + (index/5 + 1) ")\u000A";
+  for (var i = index; i < Math.min(goal.log.length, index + 5); i++) {
+      message += goal.log[i];
+      message +=  "\u000A";
+  }
+  var quickReply = [
+          {
+            "content_type":"text",
+            "title":"Home",
+            "payload":"home"
+          }];
 
-    if (index + 5 < goal.log.length) {
-        quickReply.unshift(
-            {
-              "content_type":"text",
-              "title":"View Next Logs",
-              "payload":"logs" + String(index + 5) + "!" + goal._id
-            });
-    }
-    if (index - 5 >= 0) {
-        quickReply.unshift(
-            {
-              "content_type":"text",
-              "title":"View Previous Logs",
-              "payload":"logs" + String(index - 5) + "!" + goal._id
-            });
-    }
+  if (index + 5 < goal.log.length) {
+      quickReply.unshift(
+          {
+            "content_type":"text",
+            "title":"View Next Logs",
+            "payload":"logs" + String(index + 5) + "!" + goal._id
+          });
+  }
+  if (index - 5 >= 0) {
+      quickReply.unshift(
+          {
+            "content_type":"text",
+            "title":"View Previous Logs",
+            "payload":"logs" + String(index - 5) + "!" + goal._id
+          });
+  }
 
-    var messageData = {
-        recipient: {
-          id: senderID
-        },
-        message: {
-          text:message,
-          quick_replies: quickReply
-        }
-    };
-    callSendAPI(messageData);
+  var messageData = {
+      recipient: {
+        id: senderID
+      },
+      message: {
+        text:message,
+        quick_replies: quickReply
+      }
+  };
+  callSendAPI(messageData);
 }
+
+function sendConfirm(senderID, id) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: "Are you sure you want to delete this goal?",
+      quick_replies: [
+        {
+          "content_type":"text",
+          "title":"Yes",
+          "payload":"yes  " + id
+        },
+        {
+          "content_type":"text",
+          "title":"No",
+          "payload":"no   " + id
+        }
+      ]
+    }
+  };
+  callSendAPI(messageData);
+}
+
 /*
  * Delivery Confirmation Event
  *
@@ -762,11 +788,7 @@ function receivedPostback(event) {
         });
   } else if (payload.substring(0,4) == "dele") {
       var id = payload.substring(5,payload.length);
-      gmodels.Goal.findOne({"_id": ObjectId(id)},
-        function(err, result) {
-          console.log(result);
-          viewLogs(senderID, result, 0);
-        });
+      sendConfirm(senderID, id);
   }
 
 }
