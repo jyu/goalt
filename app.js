@@ -544,11 +544,11 @@ function sendList(senderID, result, type) {
       if (result.finished.length != 0) {
         quick.push({
           "content_type":"text",
-          "title":Finished Goals,
+          "title":"Finished Goals",
           "payload": "Payload finished"
         });
       }
-    } else if (type = ="prog") {
+    } else if (type =="prog") {
       message += "Tap on a goal below to add progress to it!"
     }
     var messageData = {
@@ -929,6 +929,17 @@ function receivedPostback(event) {
   } else if (payload == "Payload start") {
     sendTextMessage(senderID, "Welcome to Goalt, your own goal tracker. Click on New Goal to start. Continue to add progress to achieve your goals!");
     setTimeout(function(){ sendHome(senderID) }, 1500);
+  } else if (payload == "Payload finished") {
+
+    models.User.findOne({name:senderID}, function(err, result) {
+      var message = "Here are your finished goals:\u000A";
+      var rev = result.finished.reverse()
+      for (var i = 0; i < result.length; i++) {
+        message += String(i+1) + ". " + rev[i];
+        message +=  "\u000A";
+      }
+      sendHomeMessage(senderID, message);
+    })
   }
 
 }
@@ -1073,6 +1084,27 @@ function sendTextMessage(recipientId, messageText) {
     }
   };
 
+  callSendAPI(messageData);
+}
+
+function sendHomeMessage(recipientId, messageText) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: messageText,
+      metadata: "DEVELOPER_DEFINED_METADATA",
+      quick_replies: [
+        {
+          "content_type":"text",
+          "title":"Home",
+          "payload":"home"
+        }
+      ]
+
+    }
+  };
   callSendAPI(messageData);
 }
 
