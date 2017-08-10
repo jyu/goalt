@@ -334,7 +334,7 @@ function receivedMessage(event) {
           var oldFin = user.finished;
           oldFin.unshift(String(goal.name + ' 🔥' + goal.total))
           models.User.update({"_id": ObjectId(id)},
-            {$set:{log:oldFin}},
+            {$set:{finished:oldFin}},
             function(err) {
               // Deleting goal
               gmodels.Goal.remove({"_id": ObjectId(id)},
@@ -347,7 +347,7 @@ function receivedMessage(event) {
                       function(err) {
                         sendTextMessage(senderID, "CONGRATS on finishing your goal: " +
                                                   goal.name +
-                                                  "! You did an absolutely fantastic job. :)" +
+                                                  "! You did an absolutely fantastic job. :) " +
                                                   "Your goal has been moved to the finished section View Goals. Going to home...");
                         sendHome(senderID);
                       });
@@ -842,7 +842,7 @@ function sendConfirmFinish(senderID, id) {
       message: {
         text: "Are you sure you want to finish " +
           result.name +
-          "? This cannot be undone. Finishing a goal will stop you from adding it, but it will be saved in your finished section forever",
+          "? This cannot be undone. Finishing a goal will stop you from adding to it, but it will be saved in your finished section forever",
         quick_replies: [
           {
             "content_type":"text",
