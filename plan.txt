@@ -1,9 +1,10 @@
 DONE:
 reddit add prog
 reddit title
+view logs
 
 TODO:
-view logs
+streak updating for reseting
 delete goal
 finish goal
 test
