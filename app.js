@@ -308,7 +308,7 @@ function receivedMessage(event) {
               models.User.update({name:senderID},
               {$set:{numGoals:result.numGoals - 1}},
               function(err) {
-                sendTextMessage(senderID, "Goal deleted!, going to home...");
+                sendTextMessage(senderID, "Goal deleted! Going to home...");
                 sendHome(senderID);
               });
             });
@@ -573,13 +573,13 @@ function streakProcess(id, type, senderID) {
         var newStreak = inc;
       }
       var total = result.total + inc
-      // if (type=="reset") {
-      //   gmodels.Goal.update({"_id": ObjectId(id)},
-      //   {$set:{streak:newStreak}},
-      //   function(err) {
-      //     return;
-      //   });
-      // }
+      if (type=="reset") {
+        gmodels.Goal.update({"_id": ObjectId(id)},
+        {$set:{streak:newStreak}},
+        function(err) {
+          return;
+        });
+      }
       if (type == "prog") {
         gmodels.Goal.update({"_id": ObjectId(id)},
         {$set:{streak:newStreak,
