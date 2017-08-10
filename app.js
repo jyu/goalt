@@ -837,6 +837,9 @@ function receivedPostback(event) {
   } else if (payload.substring(0,4) == "dele") {
       var id = payload.substring(5,payload.length);
       sendConfirm(senderID, id);
+  } else if (payload == "Payload start") {
+    sendTextMessage(senderID, "Welcome to Goalt, your own goal tracker. Click on New Goal to start. Continue to add progress to achieve your goals!");
+    setTimeout(function(){ sendHome(senderID) }, 1500);
   }
 
 }
