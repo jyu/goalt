@@ -597,6 +597,10 @@ function streak(senderID, goal) {
     // Add to streak
     return "add";
   } else if (diffDay == 0) {
+    console.log(diffTime)
+    console.log(diffDay)
+    console.log(day)
+    console.log(goal.lastDay)
     return "keep";
   }
   // Set to streak to 0
