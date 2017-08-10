@@ -704,9 +704,12 @@ function sendMotivation(senderID) {
 function viewLogs(senderID, goal, index) {
   var message = "Here are your logs for " + goal.name +
                 " (Page " + (index/5 + 1) + ")\u000A";
-  goal.log = goal.log.reverse()
+  console.log(goal.log, "1")
+  var logs = goal.log.reverse()
+  console.log(goal.log, "2")
+  console.log(logs, "3")
   for (var i = index; i < Math.min(goal.log.length, index + 5); i++) {
-      message += goal.log[i];
+      message += logs[i];
       message +=  "\u000A";
   }
   var quickReply = [
