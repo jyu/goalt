@@ -598,14 +598,14 @@ function streakProcess(id, type, senderID) {
         console.log("keep")
         var newStreak = Math.max(inc, result.streak);
       } else {
-        console.log("reset")
         var newStreak = inc;
       }
       var total = result.total + inc
-      if (type=="reset") {
+      if (res=="reset") {
         gmodels.Goal.update({"_id": ObjectId(id)},
         {$set:{streak:newStreak}},
         function(err) {
+          console.log("set", newStreak)
           return;
         });
       }
