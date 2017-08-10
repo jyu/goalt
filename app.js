@@ -298,7 +298,11 @@ function receivedMessage(event) {
     } else if (payload.substring(0,4) == "no  ") {
       sendTextMessage(senderID, "Deleting canceled, going to home...");
       sendHome(senderID);
+    } else if (payload.substring(0,4) == "nf  ") {
+      sendTextMessage(senderID, "Finishing canceled, going to home...");
+      sendHome(senderID);
     } else if (payload.substring(0,4) == "yes ") {
+      // Deleting goal
       var id = payload.substring(5,payload.length);
       gmodels.Goal.remove({"_id": ObjectId(id)},
         function(err, result) {
@@ -315,6 +319,30 @@ function receivedMessage(event) {
           }
           else {
             sendTextMessage(senderID, "There was an error deleting your goal, please try again, going to home...")
+            sendHome(senderID);
+          }
+        });
+
+    } else if (payload.substring(0,4) == "yef ") {
+      var id = payload.substring(5,payload.length);
+      // Finishing Goal
+
+      // Deleting goal
+      gmodels.Goal.remove({"_id": ObjectId(id)},
+        function(err, result) {
+          if (!err) {
+            models.User.findOne({name: senderID},
+            function(err, result) {
+              models.User.update({name:senderID},
+              {$set:{numGoals:result.numGoals - 1}},
+              function(err) {
+                sendTextMessage(senderID, "Congrats on finishing your goal! Check it out in View Goals. :) Going to home...");
+                sendHome(senderID);
+              });
+            });
+          }
+          else {
+            sendTextMessage(senderID, "There was an error finishing your goal, please try again, going to home...")
             sendHome(senderID);
           }
         });
@@ -490,6 +518,7 @@ function sendList(senderID, result, type) {
       "payload": type + " " + result[i]._id
     })
   }
+    // Check if finished goal and add here
   if (type == "view") {
     message += "Tap on a goal below to view more details.";
   } else if (type == "prog") {
@@ -756,7 +785,7 @@ function sendConfirm(senderID, id) {
         id: senderID
       },
       message: {
-        text: "Are you sure you want to delete " + result.name + "?",
+        text: "Are you sure you want to delete " + result.name + "? This cannot be undone.",
         quick_replies: [
           {
             "content_type":"text",
@@ -767,6 +796,36 @@ function sendConfirm(senderID, id) {
             "content_type":"text",
             "title":"No",
             "payload":"no   " + id
+          }
+        ]
+      }
+    };
+    callSendAPI(messageData);
+  });
+
+}
+
+function sendConfirmFinish(senderID, id) {
+  gmodels.Goal.findOne({"_id": ObjectId(id)},
+  function(err, result) {
+    var messageData = {
+      recipient: {
+        id: senderID
+      },
+      message: {
+        text: "Are you sure you want to finish " +
+          result.name +
+          "? This cannot be undone. Finishing a goal will stop you from adding it, but it will be saved in your finished section forever",
+        quick_replies: [
+          {
+            "content_type":"text",
+            "title":"Yes",
+            "payload":"yef  " + id
+          },
+          {
+            "content_type":"text",
+            "title":"No",
+            "payload":"nf   " + id
           }
         ]
       }
@@ -837,6 +896,9 @@ function receivedPostback(event) {
   } else if (payload.substring(0,4) == "dele") {
       var id = payload.substring(5,payload.length);
       sendConfirm(senderID, id);
+  } else if (payload.substring(0,6) == "finish") {
+      var id = payload.substring(7,payload.length);
+      sendConfirmFinish(senderID, id);
   } else if (payload == "Payload start") {
     sendTextMessage(senderID, "Welcome to Goalt, your own goal tracker. Click on New Goal to start. Continue to add progress to achieve your goals!");
     setTimeout(function(){ sendHome(senderID) }, 1500);

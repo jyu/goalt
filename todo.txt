@@ -1,5 +1,8 @@
 TODO:
 FINISH GOAL
+    update finished list
+    display it in view goals
+MAKE PUBLIC
 
 
 Finish Goal:
