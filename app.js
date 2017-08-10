@@ -486,15 +486,18 @@ function getList(senderID, type) {
         streakProcess(result[i]._id, "view", senderID)
       }
       // send list again
-      gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
-        if (result == null || result.length == 0) {
-          sendTextMessage(senderID, "No goals yet, start one from home!");
-          sendHome(senderID);
-          console.log("empty");
-        } else {
-          sendList(senderID, result, type);
-        }
-      });
+      setTimeout(function(){
+        gmodels.Goal.find({user:{$in:[senderID]}}, function(err, result) {
+          if (result == null || result.length == 0) {
+            sendTextMessage(senderID, "No goals yet, start one from home!");
+            sendHome(senderID);
+            console.log("empty");
+          } else {
+            sendList(senderID, result, type);
+          }
+        });
+      }, 1500);
+
     }
   });
 }
