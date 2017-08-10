@@ -333,7 +333,7 @@ function receivedMessage(event) {
           var d = new Date();
           var oldFin = user.finished;
           oldFin.unshift(String(goal.name + ' 🔥' + goal.total))
-          models.User.update({"_id": ObjectId(id)},
+          models.User.update({"name": senderID},
             {$set:{finished:oldFin}},
             function(err) {
               // Deleting goal
