@@ -365,8 +365,12 @@ function receivedMessage(event) {
     } else if (payload == "Payload finished") {
       models.User.findOne({name:senderID}, function(err, result) {
         var message = "Here are your finished goals:\u000A";
-        var rev = result.finished.reverse()
+        console.log(result.finished);
+        var rev = result.finished.reverse();
+        console.log(rev);
+        console.log(result.length)
         for (var i = 0; i < result.length; i++) {
+          console.log("added")
           message += String(i+1) + ". " + rev[i];
           message +=  "\u000A";
         }
