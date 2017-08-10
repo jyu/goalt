@@ -368,8 +368,7 @@ function receivedMessage(event) {
         console.log(result.finished);
         var rev = result.finished.reverse();
         console.log(rev);
-        console.log(result.length)
-        for (var i = 0; i < result.length; i++) {
+        for (var i = 0; i < rev; i++) {
           console.log("added")
           message += String(i+1) + ". " + rev[i];
           message +=  "\u000A";
