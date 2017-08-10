@@ -365,9 +365,7 @@ function receivedMessage(event) {
     } else if (payload == "Payload finished") {
       models.User.findOne({name:senderID}, function(err, result) {
         var message = "Here are your finished goals:\u000A";
-        console.log(result.finished);
-        var rev = result.finished.reverse();
-        console.log(rev);
+        var rev = result.finished
         for (var i = 0; i < rev.length; i++) {
           console.log("added")
           message += String(i+1) + ". " + rev[i];
@@ -945,9 +943,9 @@ function receivedPostback(event) {
     models.User.findOne({name:senderID}, function(err, result) {
       var message = "Here are your finished goals:\u000A";
       console.log(result.finished);
-      var rev = result.finished.reverse();
+      var rev = result.finished;
       console.log(rev);
-      for (var i = 0; i < result.length; i++) {
+      for (var i = 0; i < result.finished.length; i++) {
         message += String(i+1) + ". " + rev[i];
         message +=  "\u000A";
         console.log('added one')
