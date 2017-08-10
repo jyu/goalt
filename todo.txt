@@ -2,6 +2,8 @@ TODO:
 FINISH GOAL
     update finished list
     display it in view goals
+timing issue
+nai
 MAKE PUBLIC
 
 

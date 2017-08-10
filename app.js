@@ -326,26 +326,42 @@ function receivedMessage(event) {
     } else if (payload.substring(0,4) == "yef ") {
       var id = payload.substring(5,payload.length);
       // Finishing Goal
-
-      // Deleting goal
-      gmodels.Goal.remove({"_id": ObjectId(id)},
-        function(err, result) {
-          if (!err) {
-            models.User.findOne({name: senderID},
-            function(err, result) {
-              models.User.update({name:senderID},
-              {$set:{numGoals:result.numGoals - 1}},
-              function(err) {
-                sendTextMessage(senderID, "Congrats on finishing your goal! Check it out in View Goals. :) Going to home...");
-                sendHome(senderID);
-              });
+      gmodels.Goal.findOne({"_id": ObjectId(id)},
+      function(err, goal) {
+        models.User.findOne({"name": senderID},
+        function(err, user) {
+          var d = new Date();
+          var oldFin = user.finished;
+          oldFin.unshift(String(goal.name + ' 🔥' + goal.total))
+          models.User.update({"_id": ObjectId(id)},
+            {$set:{log:oldFin}},
+            function(err) {
+              // Deleting goal
+              gmodels.Goal.remove({"_id": ObjectId(id)},
+                function(err, result) {
+                  if (!err) {
+                    models.User.findOne({name: senderID},
+                    function(err, result) {
+                      models.User.update({name:senderID},
+                      {$set:{numGoals:result.numGoals - 1}},
+                      function(err) {
+                        sendTextMessage(senderID, "CONGRATS on finishing your goal: " +
+                                                  goal.name +
+                                                  "! You did an absolutely fantastic job. :)" +
+                                                  "Your goal has been moved to the finished section View Goals. Going to home...");
+                        sendHome(senderID);
+                      });
+                    });
+                  }
+                  else {
+                    sendTextMessage(senderID, "There was an error finishing your goal, please try again, going to home...")
+                    sendHome(senderID);
+                  }
+                });
             });
-          }
-          else {
-            sendTextMessage(senderID, "There was an error finishing your goal, please try again, going to home...")
-            sendHome(senderID);
-          }
         });
+      });
+
 
     } else if (payload == "home") {
       sendHome(senderID);
