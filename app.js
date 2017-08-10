@@ -454,6 +454,7 @@ function getList(senderID, type) {
     } else {
       // Update streaks
       for (var i = 0; i < result.length; i++) {
+        console.log("processing streak")
         streakProcess(result[i]._id, "view", senderID)
       }
       // send list again
@@ -568,9 +569,17 @@ function streakProcess(id, type, senderID) {
         console.log("keep")
         var newStreak = Math.max(inc, result.streak);
       } else {
+        console.log(reset)
         var newStreak = inc;
       }
       var total = result.total + inc
+      // if (type=="reset") {
+      //   gmodels.Goal.update({"_id": ObjectId(id)},
+      //   {$set:{streak:newStreak}},
+      //   function(err) {
+      //     return;
+      //   });
+      // }
       if (type == "prog") {
         gmodels.Goal.update({"_id": ObjectId(id)},
         {$set:{streak:newStreak,
@@ -587,23 +596,25 @@ function streakProcess(id, type, senderID) {
 function streak(senderID, goal) {
   var d = new Date();
   // Streak updating
-  var time = d.getTime() / 1000;
+  var time = d.getTime();
   var day = d.getDay();
   var diffDay = day - goal.lastDay;
-  var diffTime = time - goal.lastUpdate;
+  var diffTime = (time - goal.lastUpdate)/1000;
 
   // Different date, less than 48 hrs
   if ((diffDay  == 1 ||  diffDay == -6) && diffTime < 86400 * 2) {
     // Add to streak
     return "add";
   } else if (diffDay == 0) {
-    console.log(diffTime)
-    console.log(diffDay)
-    console.log(day)
-    console.log(goal.lastDay)
+    console.log(time, "time")
+    console.log(diffTime, "diffTime")
+    console.log(diffDay, "diffDay")
+    console.log(day, "day")
+    console.log(goal.lastDay, "goal last day")
     return "keep";
   }
   // Set to streak to 0
+  console.log("reset")
   return "reset";
 }
 

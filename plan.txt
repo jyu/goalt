@@ -76,3 +76,7 @@ Model.remove({ _id: req.body.id }, function(err) {
             message.type = 'error';
     }
 });
+
+
+FINISH GOAL
+GET STARTED
