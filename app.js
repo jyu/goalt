@@ -569,7 +569,7 @@ function streakProcess(id, type, senderID) {
         console.log("keep")
         var newStreak = Math.max(inc, result.streak);
       } else {
-        console.log(reset)
+        console.log("reset")
         var newStreak = inc;
       }
       var total = result.total + inc
