@@ -735,7 +735,7 @@ function sendConfirm(senderID, id) {
   function(err, result) {
     var messageData = {
       recipient: {
-        id: recipientId
+        id: senderID
       },
       message: {
         text: "Are you sure you want to delete " + result.name + "?",
