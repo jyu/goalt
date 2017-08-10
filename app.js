@@ -362,7 +362,16 @@ function receivedMessage(event) {
         });
       });
 
-
+    } else if (payload == "Payload finished") {
+      models.User.findOne({name:senderID}, function(err, result) {
+        var message = "Here are your finished goals:\u000A";
+        var rev = result.finished.reverse()
+        for (var i = 0; i < result.length; i++) {
+          message += String(i+1) + ". " + rev[i];
+          message +=  "\u000A";
+        }
+        sendHomeMessage(senderID, message);
+      })
     } else if (payload == "home") {
       sendHome(senderID);
     }
@@ -930,7 +939,6 @@ function receivedPostback(event) {
     sendTextMessage(senderID, "Welcome to Goalt, your own goal tracker. Click on New Goal to start. Continue to add progress to achieve your goals!");
     setTimeout(function(){ sendHome(senderID) }, 1500);
   } else if (payload == "Payload finished") {
-
     models.User.findOne({name:senderID}, function(err, result) {
       var message = "Here are your finished goals:\u000A";
       var rev = result.finished.reverse()
