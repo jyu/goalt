@@ -751,7 +751,11 @@ function sendMotivation(senderID) {
         index = index % images.length;
       }
       var name = images[index].title;
-      sendTextMessage(senderID, name.substring(7,name.length));
+      if (name.substring(0,7).toLowerCase() == "[image]") {
+        sendTextMessage(senderID, name.substring(7,name.length));
+      } else {
+        sendTextMessage(senderID, name);
+      }
       models.User.update({name:senderID},
       {$set:{lastPicTime:index + 1}},
       function(err) {
