@@ -535,25 +535,33 @@ function sendList(senderID, result, type) {
       "content_type":"text",
       "title":result[i].name,
       "payload": type + " " + result[i]._id
-    })
+    });
   }
-    // Check if finished goal and add here
-  if (type == "view") {
-    message += "Tap on a goal below to view more details.";
-  } else if (type == "prog") {
-    message += "Tap on a goal below to add progress to it!"
-  }
-  var messageData = {
-    recipient: {
-      id: senderID
-    },
-    message: {
-      text: message,
-      quick_replies: quick
+    // Check if finished goal and add
+  models.User.findOne({name:senderID}, function(err, result) {
+    if (type == "view") {
+      message += "Tap on a goal below to view more details.";
+      if (result.finished.length != 0) {
+        quick.push({
+          "content_type":"text",
+          "title":Finished Goals,
+          "payload": "Payload finished"
+        });
+      }
+    } else if (type = ="prog") {
+      message += "Tap on a goal below to add progress to it!"
     }
-  };
-
-  callSendAPI(messageData);
+    var messageData = {
+      recipient: {
+        id: senderID
+      },
+      message: {
+        text: message,
+        quick_replies: quick
+      }
+    };
+    callSendAPI(messageData);
+  });
 }
 
 // Sending the individual goal to view
